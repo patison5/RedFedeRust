@@ -74,8 +74,6 @@ namespace Oxide.Plugins
 
         [PluginReference] private Plugin ImageLibrary;
 
-        [PluginReference] private Plugin BetterUI;
-
         private readonly Core.MySql.Libraries.MySql _mySql = Interface.Oxide.GetLibrary<Core.MySql.Libraries.MySql>();
         private Core.Database.Connection _mySqlConnection;
 
@@ -88,105 +86,15 @@ namespace Oxide.Plugins
             //getAllUrls();
             _mySqlConnection = _mySql.OpenDb(Config["host"].ToString(), Convert.ToInt32(Config["port"]), Config["database"].ToString(), Config["username"].ToString(), Config["password"].ToString(), this);
 
-            /*
-            BasePlayer pl = BasePlayer.FindSleeping("76561198033885552");
-
-            if (pl != null)
-            {
-                PrintWarning(pl.displayName);
-
-
-                addItemToPlayerInventory(pl, "rifle.ak", 1);
-                checkIfPlayerHasItem(pl, "rifle.ak");
-                RemoveItemFromPlayerInventory(pl, "rifle.ak", 1);
-
-               // createOrder(100, pl.UserIDString, 10, "metal.refined", false);
-            }
-
-            //CheckPlayerInDatabase(1235, "Lulex.pyy");
-            */
-
-            
-
-            if (!ImageLibrary)
-            {
-                PrintError("Donwload and install ImageLibrary to work with this plugin...");
-            }
-
-            /*
-            BasePlayer player = FindBasePlayer("76561198077282054"); 
-            CuiHelper.DestroyUi(player, Layer);
-            CuiHelper.AddUi(player, OpenBaraholka(player));*/
-
-            //player.SendConsoleCommand($"baraholkaui.drawfilter {player.UserIDString} Weapons");   //11111
-            //player.SendConsoleCommand($"baraholkaui.createorder {player.UserIDString}");   //11111
-
-
-            //BasePlayer player1 = FindBasePlayer("76561198428983821");
-            //closeBaraholkaUI(player1);
-            //CuiHelper.AddUi(player1, OpenBaraholka(player1));
-            //player.SendConsoleCommand($"baraholkaui.draworders {player1.UserIDString}");
+            if (!ImageLibrary) PrintError("Donwload and install ImageLibrary to work with this plugin...");
 
             BasePlayer player = FindBasePlayer("76561198077282054");
             CuiHelper.DestroyUi(player, Layer);
             CuiHelper.DestroyUi(player, $"{LayerModal}.create_order-wrap");
-            //CuiHelper.DestroyUi(player, $"create_order-black");
-
-            //player.SendConsoleCommand($"baraholkaui.closemodal 76561198077282054");
-            //player.SendConsoleCommand($"baraholkaui.buysingleorder 76561198077282054");
-
-
-            /*if (!BetterUI)
-            {
-                PrintError("NO BetterUI found");
-            } else
-            {
-                *//*CuiElement confirmation = (CuiElement)BetterUI.Call("getRect");*//*
-                var confirmation = BetterUI.Call("CreateRect");
-
-                BetterUI.Call("setproperty", confirmation, "Name='Test', Color='0 0 0 0'");
-                BetterUI.Call("draw", confirmation);
-
-                //BetterUI.Call("getProperty", confirmation);
-
-            }*/
-
-
-
-            /*drawOrders2(player.UserIDString, 0, 1);*/
-
 
             if (ImageLibrary)
             {
                 ImageLibrary.Call("AddImage", "https://i.imgur.com/36WO7mX.png", "arrows");
-            }
-        }
-
-        [ConsoleCommand("btest")]
-        void Btest(ConsoleSystem.Arg args)
-        {
-
-        }
-
-        [ConsoleCommand("badd")]
-        void Badd(ConsoleSystem.Arg args)
-        {
-            PrintWarning(getCommission(200000, 4000000).ToString());
-        }
-
-
-        [ConsoleCommand("bpl")]
-        void Bpl(ConsoleSystem.Arg args)
-        {
-            BasePlayer pl = BasePlayer.FindSleeping("76561198033885552");
-
-            if (pl != null)
-            {
-                RemoveItemFromPlayerInventory(pl, "sulfur", 1000000);
-                PrintWarning(checkIfPlayerHasItem(pl, "sulfur").ToString());
-            } else
-            {
-                PrintWarning("No Player Found!");
             }
         }
 
@@ -208,20 +116,6 @@ namespace Oxide.Plugins
                 else
                     _mySql.Insert(Core.Database.Sql.Builder.Append($"UPDATE customer SET username = '{username}' WHERE steamid = '{userId}'"), _mySqlConnection); 
             });
-        }
-
-        private bool checkIfPlayerHasItem(BasePlayer player, string itemShortName)
-        {
-            foreach (var item in player.inventory.containerMain.itemList)
-            {
-                if (item.info.shortname == itemShortName)
-                {
-                    PrintWarning(item.info.shortname);
-                    PrintWarning(item.amount.ToString());
-                    return true;
-                }         
-            }
-            return false;
         }
 
 
@@ -291,21 +185,6 @@ namespace Oxide.Plugins
         }
 
 
-        [ConsoleCommand("tttest")]
-        void tttttest () {
-            string test = converWeaponInfoToString(new Weapon()
-            {
-                ammoAmount = 17,
-                ammoType = "ammo.rifle"
-            });
-
-            PrintWarning(test);
-        }
-
-        private void addItemToPlayerInventory(BasePlayer player, string itemShortName, int amount)
-        {
-            GiveItem(player.inventory, ItemManager.CreateByName(itemShortName, amount), player.inventory.containerMain);
-        }
 
         private void RemoveItemFromPlayerInventory (BasePlayer player, string itemShortName, int amount)
         {
@@ -441,59 +320,10 @@ namespace Oxide.Plugins
             }
         }
 
-        [ConsoleCommand("get")]
-        void getit()
-        {
-            GetActiveOrders(BasePlayer.FindSleeping("76561198033885552"));
-        }
-        private void GetActiveOrders(BasePlayer player)
-        {
-            List<BOrder> _tmpOrders = new List<BOrder>();
-
-            _mySql.Query(Core.Database.Sql.Builder.Append($"SELECT * FROM `orders`"), _mySqlConnection, list =>
-            {
-                if ((list != null) && (list.Count > 0))
-                {
-                    // тут будет происходить отрисовка всех элементов барахолки
-
-                    foreach (var item in list)
-                    {
-                        Puts(item["customer_steam_id"].ToString());
-                        Puts(item["order_id"].ToString());
-
-                        SendReply(player, $"{item["order_id"].ToString()}");
-                    }
-                }
-                else
-                {
-                    PrintWarning("[selectPrice] Error! No element in `items` table founded!");
-                }
-            });
-        }
-
-        private void buyOrder(BasePlayer player, int OrderID, int OrderPrice)
-        {
-            _mySql.Query(Core.Database.Sql.Builder.Append($"SELECT * FROM `customer` WHERE `steamid` = {player.UserIDString}  LIMIT 1"), _mySqlConnection, list =>
-            {
-                if ((list != null) && (list.Count > 0))
-                {
-                    int userMoney = (int)list.FirstOrDefault()["money"];
-
-                   
-                }
-                else
-                {
-                    PrintWarning("[selectPrice] Error! No element in `items` table founded!");
-                }
-            });
-        }
-
         // unusable function
         private void FinishCreatingOrder (BasePlayer player)
         {
             BOrder playerOrder = FindBOrder(player.UserIDString);
-
-            Puts("test3");
 
             var querry = "INSERT INTO `orders` (`customer_steam_id`, `offered_item_shortname`, " +
                 "`offered_item_blueprint`, `offered_item_condition`, `offered_item_skin_id`, `offered_Item_amount`, " +
