@@ -1,0 +1,642 @@
+{
+  "settings": {
+    "Tabs": [
+      {
+        "ButtonText": "Описание",
+        "HeaderText": "<color=#FF9218>Информация о сервере</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "<color=#FFEFCA>                                                      Добро пожаловать на  сервер <color=#eeb64c><size=19><color=#5bb95b>❖</color>Red Fede Rust<color=#5bb95b>❖</color></size></color></color>",
+              "<color=#000000>====================================================================================================================================</color>",
+              "<color=#eeb64c>Особенности сервера:</color>",
+              "<color=#FFEFCA><color=#5bb95b>✓</color> Улучшения для оптимизации работы сервера и поднятия FPS игроков!</color>",
+              "<color=#FFEFCA><color=#5bb95b>✓</color> Отличная конфигурация сервера, что позволит вам играть без неудобств!</color>",
+              "<color=#FFEFCA><color=#5bb95b>✓</color> <color=#00BFFF>Уникальные плагины:</color> Репутация, Профиль, Топ, Охотники за головами!</color>",
+              "<color=#FFEFCA><color=#5bb95b>✓</color> <color=#00BFFF>Приватные плагины:</color> Колода карт, Космичиские кристаллы, Система сна и другое!</color>",
+              "",
+              "<color=#eeb64c>Подробности сервера:</color>",
+              "",
+              "<color=#eeb64c><color=#5bb95b>★</color> IP сервера: </color><color=#5bb95b>37.230.137.36:22021</color>",
+              "<color=#eeb64c><color=#5bb95b>★</color> Клановый лимит: <color=#5bb95b>3 человека</color></color> ",
+              "",
+              "<color=#eeb64c><color=#5bb95b>★</color> Рейт сервера днем:</color> <color=#5bb95b>Х2</color>                                                                                            <color=#eeb64c><color=#5bb95b>★</color> Вайп был:</color>    <color=#5bb95b>   28.11.19</color>",
+              "<color=#eeb64c><color=#5bb95b>★</color> Рейт сервера ночью:</color> <color=#5bb95b>Х3</color>                                                                                          <color=#eeb64c><color=#5bb95b>★</color> Вайп будет:</color> <color=#5bb95b>   05.12.19</color>",
+              "",
+              "<color=#eeb64c><color=#5bb95b>★</color> Вайп карты:</color> <color=#FFEFCA>каждые <color=#5bb95b>7 дней</color> в <color=#5bb95b>12:00</color> по московскому времени</color>                  <color=#eeb64c><color=#5bb95b>★</color> Размер карты: </color> <color=#5bb95b>3500</color>",
+              "<color=#eeb64c><color=#5bb95b>★</color> Глобальный вайп:</color> <color=#FFEFCA>каждый <color=#5bb95b>2й четверг</color></color>                                                               <color=#eeb64c><color=#5bb95b>★</color> Seed карты: </color> <color=#5bb95b>     35</color>",
+              "",
+              "<color=#eeb64c><color=#5bb95b>★</color> Наш магазин:</color> <color=#5bb95b>https://red-fede-rust.gamestores.ru</color>",
+              "<color=#eeb64c><color=#5bb95b>★</color> Наш сайт:</color> <color=#5bb95b>https://redfederust.ru</color>"
+            ],
+            "ImageSettings": [
+              {
+                "Position": {
+                  "MinX": 0.0,
+                  "MaxX": 0.5,
+                  "MinY": 0.0,
+                  "MaxY": 0.5
+                },
+                "Url": null,
+                "TransparencyInPercent": 1
+              },
+              {
+                "Position": {
+                  "MinX": 0.5,
+                  "MaxX": 1.0,
+                  "MinY": 0.0,
+                  "MaxY": 0.5
+                },
+                "Url": null,
+                "TransparencyInPercent": 1
+              },
+              {
+                "Position": {
+                  "MinX": 0.0,
+                  "MaxX": 0.5,
+                  "MinY": 0.5,
+                  "MaxY": 1.0
+                },
+                "Url": null,
+                "TransparencyInPercent": 1
+              },
+              {
+                "Position": {
+                  "MinX": 0.5,
+                  "MaxX": 1.0,
+                  "MinY": 0.5,
+                  "MaxY": 1.0
+                },
+                "Url": null,
+                "TransparencyInPercent": 1
+              }
+            ]
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 32,
+        "TextFontSize": 18,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      },
+      {
+        "ButtonText": "Плагины",
+        "HeaderText": "<color=#FF9218>Плагины</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Космические кристаллы</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Охотник за головами</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Колода карт</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Репутация</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Профиль игрока</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Реферальная система</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Визуальный голосовой чат</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Система сна</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Друзья</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Сортировка вещей в ящиках</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>NPC</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Телепортация</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Оповещение о рейде</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Автозакрытие дверей</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Авто улучшение и удаление построек</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Награда за игру на сервере</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Баннеры</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Камеры наблюдения, управляемая турель и прожектор</color>"
+            ],
+            "ImageSettings": []
+          },
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Радиоактивный дом</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Автоматические авторизация друзей в замках и турелях</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Автораспределение ресурсов в печах</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Визаулизация голосового чата</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Авто перемещение предметов в инвентарь</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Статистика смерти</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Дистанционный С4</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Система репортов</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Радиоактивная руда</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Турель без электричества</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Эмоции</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Ночная защита</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Крушение самолета</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Карта</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Рюкзак</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Дуэли</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Топ сервера</color>",
+              "<color=#5bb95b>✓</color> <color=#eeb64c>Киты</color>"
+            ],
+            "ImageSettings": []
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 32,
+        "TextFontSize": 20,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      },
+      {
+        "ButtonText": "Бинды",
+        "HeaderText": "<color=#FF9218>Бинды сервера</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#FFEFCA>Для того, чтобы установить бинды откройте консоль клавишей (F1)</color>",
+              "<color=#FFEFCA>Затем пропишите в консоль команды, указанные ниже:</color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>bind b backpack.open </color>           - рюкзак (B)</color>",
+              "<color=#FFEFCA><color=#5bb95b>bind m map.open </color>                 - карта (M)</color>",
+              "<color=#FFEFCA><color=#5bb95b>bind h chat.say = /gestures</color>  - меню эмоций (H)</color>",
+              "<color=#FFEFCA><color=#5bb95b>bind k chat.say = /kit</color>             - наборы (K)</color>",
+              "<color=#FFEFCA><color=#5bb95b>bind u building.upgrade</color>         - меню улучшения построек (U)</color>",
+              "<color=#FFEFCA><color=#5bb95b>bind i chat.say = /menu </color>          - меню сервера (I)</color>"
+            ],
+            "ImageSettings": []
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 36,
+        "TextFontSize": 18,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      },
+      {
+        "ButtonText": "Правила",
+        "HeaderText": "<color=#FF9218>Список правил сервера</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "",
+              "",
+              "<size=19><color=#ff734c>Правила могут меняться без предупреждения. Незнание не освобождает от ответственности.</color></size>",
+              "",
+              "<size=19><color=#eeb64c><color=#5bb95b>1.</color> Общие положения</color></size>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>1.1</color> Вещи и привелегии, полученные в течении игрового процесса,</color>",
+              "<color=#FFEFCA>      а так же купленные в игровом магазине, не подлежат восстановлению в случае утраты.</color>",
+              "<color=#FFEFCA><color=#5bb95b>1.2</color> Запрещено использование ников, содержащие рекламу или нецензурные выражению.</color>",
+              "<color=#FFEFCA><color=#5bb95b>1.3</color> Администратор имеет право выдать мут или бан без объяснения причин.</color>",
+              "<color=#FFEFCA><color=#5bb95b>1.4</color> Запрещено продавать внутриигровые предметы за реальную валюту.</color>"
+            ],
+            "ImageSettings": []
+          },
+          {
+            "TextLines": [
+              "",
+              "",
+              "",
+              "<size=19><color=#ff734c>Правила могут меняться без предупреждения. Незнание не освобождает от ответственности.</color></size>",
+              "",
+              "<size=19><color=#eeb64c><color=#5bb95b>2.</color> Правила чата</color></size>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>2.1</color> Запрещено оскорбление игроков или администрации сервер - мут до 24 часов</color>",
+              "<color=#FFEFCA><color=#5bb95b>2.2</color> Запрещено использование нецензурных выражений - мут до 24 часов</color>",
+              "<color=#FFEFCA><color=#5bb95b>2.3</color> Запрещена провокация игроков или администрации сервера - мут до 12 часов</color>",
+              "<color=#FFEFCA><color=#5bb95b>2.4</color> Запрещена реклама в любой форме - мут навсегда </color>",
+              "<color=#FFEFCA><color=#5bb95b>2.5</color> Запрещено оскорбление сервера - мут до 14 дней</color>",
+              "<color=#FFEFCA><color=#5bb95b>2.6</color> Запрещены политические споры и разжигание межнациональной розни - мут до 14 дней</color>"
+            ],
+            "ImageSettings": []
+          },
+          {
+            "TextLines": [
+              "",
+              "",
+              "",
+              "<size=19><color=#ff734c>Правила могут меняться без предупреждения. Незнание не освобождает от ответственности.</color></size>",
+              "",
+              "<size=19><color=#eeb64c><color=#5bb95b>3.</color> Правила геймплея</color></size>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>3.1</color> Запрещено использовать читы (бан навсегда)</color>",
+              "<color=#FFEFCA><color=#5bb95b>3.2</color> Запрещено использовать макросы (бан от 7 дней)</color>",
+              "<color=#FFEFCA><color=#5bb95b>3.3</color> Запрещено заключать союзы и играть больше 3-х человек (бан до 7 дней)</color>",
+              "<color=#FFEFCA><color=#5bb95b>3.4</color> Запрещено использовать баги (бан до 7 дней)</color>"
+            ],
+            "ImageSettings": []
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 36,
+        "TextFontSize": 17,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      },
+      {
+        "ButtonText": "Команды",
+        "HeaderText": "<color=#FF9218>Команды</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#5bb95b>✓/info</color><color=#FFEFCA>  -  Информация о сервере.</color>",
+              "<color=#5bb95b>✓/cards</color><color=#FFEFCA>  -  Колода карт.</color>",
+              "<color=#5bb95b>✓/kit</color><color=#FFEFCA>  -  Показать киты.</color>",
+              "<color=#5bb95b>✓/vk</color><color=#FFEFCA>  -  Оповещение о рейде и награда за вступление в группу ВК.</color>",
+              "<color=#5bb95b>✓/rep</color><color=#FFEFCA>  -  Меню плагина репутация.</color>",
+              "<color=#5bb95b>✓/profile</color><color=#FFEFCA>  -  Профиль игрока.</color>",
+              "<color=#5bb95b>✓/profile [nickname]</color><color=#FFEFCA>  -  Профиль игрока с ником [nickname]</color>",
+              "<color=#5bb95b>✓/top</color><color=#FFEFCA>  -  Топ сервера.</color>",
+              "<color=#5bb95b>✓/trade</color><color=#FFEFCA>  -  Команда обмена лутом между игроками.</color>",
+              "<color=#5bb95b>✓/gestures</color><color=#FFEFCA>  -  Меню эмоций.</color>",
+              "<color=#5bb95b>✓/report</color><color=#FFEFCA>  -  Отправить жалобу на игрока.</color>",
+              "<color=#5bb95b>✓/sc</color><color=#FFEFCA>  -  Подробнее о камере наблюдения.</color>",
+              "<color=#5bb95b>✓/sl</color><color=#FFEFCA>  -  Подробнее о прожекторах.</color>",
+              "<color=#5bb95b>✓/remove</color><color=#FFEFCA>  -  Команда удаления построек.</color>",
+              "<color=#5bb95b>✓/up 1-4</color> <color=#FFEFCA>  -  Автоулучшение построек.</color>",
+              "<color=#5bb95b>✓/tpr</color><color=#FFEFCA>  -   Команда телепортации к игроку.</color>",
+              "<color=#5bb95b>✓/store</color><color=#FFEFCA>  -  Магазин.</color>",
+              "<color=#5bb95b>✓/marker</color><color=#FFEFCA>  -  Настройка HitMarker.</color>"
+            ],
+            "ImageSettings": []
+          },
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#5bb95b>✓/duel</color><color=#FFEFCA>  -  Команда создания дуэлей.</color>",
+              "<color=#5bb95b>✓/turret</color><color=#FFEFCA>  -  Активация турели без электричества.</color>",
+              "<color=#5bb95b>✓/map</color><color=#FFEFCA>  -  Открыть карту.</color>",
+              "<color=#5bb95b>✓/bonus</color><color=#FFEFCA>  - Обменять бонусы на рубли.</color>",
+              "<color=#5bb95b>✓/backpack</color><color=#FFEFCA>  -  Открыть рюкзак.</color>",
+              "<color=#5bb95b>✓/banner</color><color=#FFEFCA>  -  Баннеры.</color>",
+              "<color=#5bb95b>✓/rustnet</color><color=#FFEFCA>  -  Система RustNet.</color>",
+              "<color=#5bb95b>✓/pm [reciever]</color><color=#FFEFCA>  -  Отправить приватное сообщение [получатель].</color>",
+              "<color=#5bb95b>✓/ad [5-30]</color><color=#FFEFCA>  -  Команда включения автозакрытия дверей спустя [5-30] секунд.</color>",
+              "<color=#5bb95b>✓/al or autolock</color><color=#FFEFCA>  -  Команда автоматической установки пароля на дверь.</color>",
+              "<color=#5bb95b>✓/pm [reciever]</color><color=#FFEFCA>  -  Отправить приватное сообщение [получатель].</color>"
+            ],
+            "ImageSettings": []
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 32,
+        "TextFontSize": 18,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      },
+      {
+        "ButtonText": "Топ и Профиль",
+        "HeaderText": "<color=#FF9218>Топ и Профиль</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#FFEFCA>                                         Сервер <color=#eeb64c><size=19><color=#5bb95b>❖</color>Red Fede Rust<color=#5bb95b>❖</color></size></color> рад видеть каждого игрока у себя.</color>",
+              "<color=#000000>================================================================================================================================</color>",
+              "<color=#FFEFCA><color=#eeb64c>Плагины Профиль</color> и <color=#eeb64c>ТОП</color> были добавлены на сервер для комфортного отслеживания</color>",
+              "<color=#FFEFCA>своей статистики, а также статистики других игроков.</color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>/profile</color> - Позволит открыть ваш собственный профиль</color>",
+              "<color=#FFEFCA><color=#5bb95b>/profile xycейн</color> - Позволит открыть профиль игрока с никнеймом <color=#eeb64c>'xycейн'</color></color>",
+              "",
+              "<color=#ff734c>Профиль другого игрока можно также открыть просто кликнув по игроку из списка ТОП'а</color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>/top</color> - Позволит открыть общую таблицу игроков.</color>",
+              "<color=#FFEFCA>На данном этапе сортировка игроков в ТОП'e ведется только по К/D, но плагин еще будет дописываться</color>",
+              "<color=#FFEFCA>появится дополнительный функционал сортировки игроков</color>"
+            ],
+            "ImageSettings": []
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 32,
+        "TextFontSize": 17,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      },
+      {
+        "ButtonText": "Космические кристаллы",
+        "HeaderText": "<color=#FF9218>Кристаллы</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "<color=#FFEFCA>На нашем сервере присутствует плагин на космические кристаллы.</color>",
+              "<color=#FFEFCA>Всего имеется 2 типа кристаллов:</color>",
+              "",
+              "<color=#00FFFF>Кристаллы Ниберия, </color> <color=#FFEFCA>которые можно найти в:</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Чинук</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Элитный ящик</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Ящик Бредли</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Ящик с вертолета</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Айрдроп</color>",
+              "<color=#eeb64c></color>",
+              "",
+              "<color=#8A2BE2>Кристаллы Илизиума, </color>, <color=#FFEFCA>которые можно найти в:</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Военный ящик</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Ящик</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Айрдроп</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Подводный сундук</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Пешерный ящик</color>",
+              "",
+              "<color=#FFEFCA>При достижении достаточного количества кристаллов,вы сможете обменять их у <color=#5bb95b>Черного торговца</color> на рубли.</color>",
+              "<color=#FFEFCA><color=#5bb95b>Черный торговец</color> расположен в городе ученых, рядом с переработчиком в разрушенном доме.</color>"
+            ],
+            "ImageSettings": [
+              {
+                "Position": {
+                  "MinX": 0.2,
+                  "MaxX": 0.4,
+                  "MinY": 0.15,
+                  "MaxY": 0.4
+                },
+                "Url": "pinkCrystal",
+                "TransparencyInPercent": 100
+              },
+              {
+                "Position": {
+                  "MinX": 0.2,
+                  "MaxX": 0.4,
+                  "MinY": 0.45,
+                  "MaxY": 0.7
+                },
+                "Url": "blueCrystal",
+                "TransparencyInPercent": 100
+              }
+            ]
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 32,
+        "TextFontSize": 16,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      },
+      {
+        "ButtonText": "Репутация игрока",
+        "HeaderText": "<color=#FF9218>Репутация игрока</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#FFEFCA>Смысл плагина заключается в поддержании справедливости на сервере.</color>",
+              "<color=#FFEFCA>Один игрок может выставить оценку другому по одной из причин в трёх категориях:</color>",
+              "",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Положительная репутация:</color> <color=#FFEFCA>Адекватность, Анти-Рейд, Честность, Помощь</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Нейтральная репутация</color>",
+              "<color=#eeb64c><color=#5bb95b>➢</color> Отрицательная репутация:</color> <color=#FFEFCA>Неадекватность, Рейд, Обман, Вред</color>",
+              "",
+              "<color=#FFEFCA>Имейте в виду, репутация напрямую влияет на количество бонусов, получаемых каждый час.</color>",
+              "<color=#FFEFCA>Так, например, при нейтральной репутации вы получаете <color=#eeb64c>10 бонусов</color> и обменять их на <color=#eeb64c>1 рубль</color>.</color>",
+              "<color=#FFEFCA>При репутации <color=#eeb64c>+10</color> вы заберёте уже <color=#eeb64c>20 бонусов</color>, а следовательно - <color=#eeb64c>2 рубля</color></color>.",
+              "<color=#FFEFCA>Но это не значит, что низкая оценка никак на нем не отразится.</color>",
+              "<color=#FFEFCA>При попытке договориться о чем-либо, с любым из игроков, вы всегда можете посмотреть его профиль. <color=#5bb95b>(/profile nickname)</color> </color>",
+              "<color=#FFEFCA>Написав <color=#eeb64c>/rep</color> и кликнув по имени игрока.  </color>",
+              "<color=#FFEFCA>Там вы увидите полную информацию о времени, проведенном на сервере у игрока,</color>",
+              "<color=#FFEFCA>а также его очки репутации в той или иной категории.</color>",
+              "<color=#5bb95b>Играйте честно, относитесь к игрокам хорошо и тем самым поднимайте свою репутацию!</color>",
+              "",
+              "<color=#ff734c>Репутация на сервере обновляется каждый вайп!</color>"
+            ],
+            "ImageSettings": []
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 32,
+        "TextFontSize": 17,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      },
+      {
+        "ButtonText": "Новая руда",
+        "HeaderText": "<color=#FF9218>Радиоактивые частицы</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#FFEFCA>На нашем сервере добывая руду Вы будете получать одноименные <color=#eeb64c>радиоактивные частицы</color></color>",
+              "<color=#FFEFCA>Всего есть 4 типа <color=#eeb64c>частиц:</color></color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>➢</color> Каменная руда - <color=#708090>Радиоактивный камень</color></color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>➢</color> Железная руда - <color=#daa570>Радиоактивный металл</color></color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>➢</color> Железная руда - <color=#4682B4>Радиоактивный МВК</color></color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>➢</color> Серная руда   - <color=#DAA520>Радиоактивная сера</color></color>",
+              "",
+              "<color=#FFEFCA>После того как Вы добыли <color=#eeb64c>частицы</color>, их можно переработать в чистые ресурсы.</color>",
+              "",
+              "<color=#ff734c>Будьте аккуратны, при их распаде Вы будете получать огромную дозу радиации!</color>",
+              "<color=#ff734c>Для получения чистой руды поместить частицы в переработчик!</color>"
+            ],
+            "ImageSettings": []
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 32,
+        "TextFontSize": 18,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      },
+      {
+        "ButtonText": "Другие плагины",
+        "HeaderText": "<color=#FF9218>Другие плагины</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#eeb64c><size=19>                                                   ✪ Автоперемещение предметов в инвентарь ✪</size></color>",
+              "<color=#000000>================================================================================================================================</color>",
+              "<color=#FFEFCA>Данный плагин позволяет создавать вещи не перетаскивая материалы для них в инвентарь.</color>",
+              "<color=#FFEFCA>Вы будете напрямую расходовать материалы которые лежат в ваших ящиках или шкафу.</color>",
+              "<color=#FFEFCA>Для крафта нажмите 2 раза по предмету в меню Q <color=#ff734c>(даже если он не подсвечивается)</color>.</color>",
+              "",
+              "<color=#eeb64c>Команды плагина:</color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>/ip</color> - включение и отключение плагина</color>",
+              "<color=#FFEFCA><color=#5bb95b>/ip autocraft</color> - автокрафт по нажатию</color>",
+              "<color=#FFEFCA><color=#5bb95b>/ip fromtc</color> - расходование вещей не только из ящик,но и из шкафа</color>",
+              "",
+              "<color=#eeb64c><size=19>                                                                          ✪ Система баннеров ✪</size></color>",
+              "<color=#000000>================================================================================================================================</color>",
+              "<color=#FFEFCA>За игру на сервере (каждые 24 часа) вы будете получать случайный баннер!</color>",
+              "<color=#FFEFCA>Они отображаются в вашем профиле, а так же игроку которого вы убили!</color>",
+              "",
+              "<color=#eeb64c>Команды плагина:</color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>/banner</color> -  меню баннеров</color>"
+            ],
+            "ImageSettings": []
+          },
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#eeb64c><size=19>                                                               ✪ Дистанционное управление С4 ✪ (В РАЗРАБОТКЕ!!!)</size></color>",
+              "<color=#000000>================================================================================================================================</color>",
+              "<color=#FFEFCA>С помощью данного плагина вы сможете взрывать С4 по нажатию кнопки.</color>",
+              "<color=#FFEFCA>Для использования вы должны настроить частоту вашего взрывного устройства.</color>",
+              "<color=#FFEFCA>Его можно купить в специальном магазине в городе или скрафтить.</color>",
+              "",
+              "<color=#eeb64c>Команды плагина:</color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>...</color> - создание взрывного устройства</color>",
+              "",
+              "<color=#eeb64c><size=19>                                                                              ✪ Система прокачки ✪</size></color>",
+              "<color=#000000>================================================================================================================================</color>",
+              "<color=#FFEFCA>Добывая определенные ресурсы вы прокачиваете один из 4-х навыков!</color>",
+              "<color=#FFEFCA>С получением нового уровня навыка, рейты определенных ресурсов увеличиваются!</color>",
+              "",
+              "<color=#eeb64c>Команды плагина:</color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>/stats</color> -  информация о текущем уровне</color>",
+              "<color=#FFEFCA><color=#5bb95b>/statsui</color> -  скрывать панель прогресса</color>",
+              "<color=#FFEFCA><color=#5bb95b>/statinfo</color> -  текущее увеличение рейтов на сервере</color>"
+            ],
+            "ImageSettings": []
+          },
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#eeb64c><size=19>                                                                              ✪ Самонаводящиеся ракеты ✪</size></color>",
+              "<color=#000000>================================================================================================================================</color>",
+              "<color=#FFEFCA>Наша команда разработчиков добавила на сервер еще один тип ракет!</color>",
+              "<color=#FFEFCA><color=#5bb95b>Самонаводящиеся ракеты</color> Вы сможете найти в <color=#5bb95b>элитных ящиках</color> на закрытых рт,</color>",
+              "<color=#FFEFCA>а также в падающих с <color=#5bb95b>танка</color> или <color=#5bb95b>вертолета</color> ящиках!</color>",
+              "",
+              "<color=#FFEFCA>Использовать данные ракеты вы можете против низкопролетающих самолетов, а также против</color>",
+              "<color=#FFEFCA>пролетающего  мимо миникоптера или большого вертолета из скрапа</color>"
+            ],
+            "ImageSettings": []
+          },
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#eeb64c><size=19>                                                                               ✪ Улучшение построек ✪</size></color>",
+              "<color=#000000>================================================================================================================================</color>",
+              "<color=#FFEFCA>У нас на сервере установлен плагин на улучшение построек при размещении.</color>",
+              "",
+              "<color=#eeb64c>Использование:</color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>1.</color> Вы можете открыть меню на клавишу E.</color>",
+              "<color=#FFEFCA><color=#5bb95b>2.</color> Нажимая несколько раз, выберите нужный уровень строительства.</color>",
+              "<color=#FFEFCA><color=#5bb95b>3.</color> При размещении каркаса, постройки улучшаются автоматически.</color>",
+              "<color=#FFEFCA><color=#5bb95b>3.</color> Вы можете улучшать ваши постройки с помощью киянки.</color>",
+              "",
+              "<color=#eeb64c>Команды:</color>",
+              "",
+              "<color=#FFEFCA><color=#5bb95b>/up 0</color> - Отключение автоматического улучшения строительства.</color>",
+              "<color=#FFEFCA><color=#5bb95b>/up 1</color> - Улучшение и строительство деревом.</color>",
+              "<color=#FFEFCA><color=#5bb95b>/up 2</color> - Улучшение и строительство камнем.</color>",
+              "<color=#FFEFCA><color=#5bb95b>/up 3</color> - Улучшение и строительство металлом.</color>",
+              "<color=#FFEFCA><color=#5bb95b>/up 4</color> - Улучшение и строительство мвк.</color>"
+            ],
+            "ImageSettings": []
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 32,
+        "TextFontSize": 18,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      },
+      {
+        "ButtonText": "Охотник за головами",
+        "HeaderText": "<color=#FF9218>Охотник за головами</color>",
+        "Pages": [
+          {
+            "TextLines": [
+              "",
+              "",
+              "<color=#FFEFCA>                            Сервер <color=#eeb64c><size=19><color=#5bb95b>❖</color>Red Fede Rust<color=#5bb95b>❖</color></size></color> представляет вам возможность сыграть в <color=#eeb64c>Headhunter.</color></color>",
+              "<color=#000000>================================================================================================================================</color>",
+              "<color=#FFEFCA>Ваш выбор: стать опасным <color=#FF7F50>преступником</color> или присоединиться к <color=#00BFFF>охотникам</color> за головами.</color>",
+              "<color=#FFEFCA>Попробуйте добыть уникальный череп <color=#FF7F50>жертвы</color> или же выжить против опытных и кровожадных убийц.</color>",
+              "<color=#FFEFCA><color=#00BFFF>Охотники </color>- хорошо информированы, но вероломны и, с лёгкостью, могут напасть друг на друга.</color>",
+              "<color=#FFEFCA><color=#FF7F50>Жертва </color>- загнана в угол, не может укрыться в городе, но вооружена и очень опасна.</color>",
+              "<color=#000000>================================================================================================================================</color>",
+              "<color=#FFEFCA>Если у <color=#FF7F50>преступника</color> получится продержаться 10 минут, то награда будет действительно большой.</color>",
+              "<color=#FFEFCA>А если нет, то борьба <color=#00BFFF>охотников</color> за право донести череп до торговца будет жестока.</color>",
+              "",
+              "<color=#F0E68C>Пусть победит сильнейший!</color>"
+            ],
+            "ImageSettings": []
+          }
+        ],
+        "TabButtonAnchor": 4,
+        "TabButtonFontSize": 16,
+        "HeaderAnchor": 4,
+        "HeaderFontSize": 32,
+        "TextFontSize": 18,
+        "TextAnchor": 3,
+        "OxideGroup": ""
+      }
+    ],
+    "ShowInfoOnPlayerInit": true,
+    "ShowInfoOnlyOncePerRuntime": true,
+    "TabToOpenByDefault": 0,
+    "Position": {
+      "MinX": 0.08,
+      "MaxX": 0.901,
+      "MinY": 0.12,
+      "MaxY": 0.924
+    },
+    "BackgroundImage": {
+      "Enabled": false,
+      "Position": {
+        "MinX": 0.0,
+        "MaxX": 0.5,
+        "MinY": 1.0,
+        "MaxY": 0.14
+      },
+      "Url": null,
+      "TransparencyInPercent": 60
+    },
+    "ActiveButtonColor": "#47cbff",
+    "InactiveButtonColor": "#437cbf",
+    "CloseButtonColor": "#437cbf",
+    "NextPageButtonColor": "#437cbf",
+    "PrevPageButtonColor": "#437cbf",
+    "BackgroundColor": "#202020DF",
+    "HelpButton": {
+      "IsEnabled": false,
+      "Text": "Help",
+      "Position": {
+        "MinX": 0.0,
+        "MaxX": 0.05,
+        "MinY": 0.1,
+        "MaxY": 0.14
+      },
+      "Color": "#127127127255",
+      "FontSize": 18
+    },
+    "UpgradedConfig": false
+  }
+}
