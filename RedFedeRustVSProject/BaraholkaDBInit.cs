@@ -54,10 +54,10 @@ namespace Oxide.Plugins
         }
         private void OnPluginLoaded()
         {
-            _mySqlConnection = _mySql.OpenDb(Config["host"].ToString(), Convert.ToInt32(Config["port"]), Config["database"].ToString(), Config["username"].ToString(), Config["password"].ToString(), this);
+            /*_mySqlConnection = _mySql.OpenDb(Config["host"].ToString(), Convert.ToInt32(Config["port"]), Config["database"].ToString(), Config["username"].ToString(), Config["password"].ToString(), this);
             generateItems();
             generatePrices();
-            createTableWithPrices();
+            createTableWithPrices();*/
 
         }
         protected override void LoadDefaultConfig()
@@ -174,27 +174,14 @@ namespace Oxide.Plugins
             { "battery.small", 10 },
             { "blood", 10 },
             { "bone.fragments", 10 },
-            { "charcoal", 10 },
-            { "cloth", 10 },
-            { "crude.oil", 10 },
             { "diesel_barrel", 10 },
             { "fertilizer", 10 },
             { "horsedung", 10 },
-            { "hq.metal.ore", 10 },
-            { "metal.refined", 10 },
-            { "leather", 10 },
-            { "metal.fragments", 10 },
-            { "metal.ore", 10 },
             { "plantfiber", 10 },
             { "researchpaper", 10 },
             { "water.salt", 10 },
-            { "scrap", 10 },
-            { "stones", 10 },
-            { "sulfur.ore", 10 },
-            { "sulfur", 10 },
             { "water", 10 },
             { "skull.wolf", 10 },
-            { "wood", 10 },
             { "antiradpills", 10 },
             { "tool.camera", 10 },
             { "fishingrod.handmade", 10 },
@@ -204,6 +191,20 @@ namespace Oxide.Plugins
             { "grenade.smoke", 10 },
             { "supply.signal", 10 },
             { "cakefiveyear", 10 },
+
+            { "sulfur.ore", 190 },
+            { "sulfur", 220 },
+            { "wood", 11 },
+            { "scrap", 1 },
+            { "stones", 55 },
+            { "leather", 10 },
+            { "metal.fragments", 110 },
+            { "charcoal", 10 },
+            { "cloth", 15 },
+            { "crude.oil", 10 },
+            { "hq.metal.ore", 290 },
+            { "metal.refined", 330 },
+            { "metal.ore", 10 },
         };
 
         public class ItemDefinitionExtended

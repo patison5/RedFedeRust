@@ -138,86 +138,8 @@ namespace Oxide.Plugins
 
 
 
-
-
-        [ConsoleCommand("step1")]
-        void Step1()
+        private void drawAllOrdersInfoToConsole()
         {
-            BasePlayer pl = BasePlayer.FindSleeping("76561198033885552");
-            Item itemTest = null;
-
-
-            if (pl == null)
-            {
-                PrintWarning("No player found");
-                return;
-            }
-
-            StartCreatingOrder(pl);
-
-            // это чувак делает руками... когда жмакает по элементу из панели (в ф-ю должен будет прийти Item.. никакие циклы тут нахуй не нужны =) 
-            foreach (var item in pl.inventory.containerBelt.itemList)
-            {
-                if (item.info.category != ItemCategory.Weapon)
-                {
-                    itemTest = item;
-                    break;
-                }
-            }
-
-            if (itemTest == null)
-                return;
-
-            SelectItem(pl, itemTest, false);
-
-            Puts("test1");
-            SelectItem(pl, itemTest, true);
-            //selectAmountOfOfferedItem(pl, 1);
-            Puts("test2");
-
-            selectPrice(pl, 202250);
-        }
-
-        [ConsoleCommand("step2")]
-        void Step2()
-        {
-            BasePlayer pl = BasePlayer.FindSleeping("76561198033885552");
-            Item itemTest = null;
-
-
-            if (pl == null)
-            {
-                PrintWarning("No player found");
-                return;
-            }
-
-            StartCreatingOrder(pl);
-
-            // это чувак делает руками... когда жмакает по элементу из панели (в ф-ю должен будет прийти Item.. никакие циклы тут нахуй не нужны =) 
-            foreach (var item in pl.inventory.containerBelt.itemList)
-            {
-                if (item.info.category != ItemCategory.Weapon)
-                {
-                    itemTest = item;
-                    break;
-                }
-            }
-
-            if (itemTest == null)
-                return;
-
-            SelectItem(pl, itemTest);
-
-            testList();
-
-            StopCreatingOrder(pl);
-        }
-
-
-        private void testList()
-        {
-            Puts("Checking item's list");
-
             if (_orders.Count == 0)
             {
                 PrintWarning("Orders list is clear.");
@@ -261,8 +183,10 @@ namespace Oxide.Plugins
 
             var querry = "INSERT INTO `orders` (`customer_steam_id`, `offered_item_shortname`, " +
                 "`offered_item_blueprint`, `offered_item_condition`, `offered_item_skin_id`, `offered_Item_amount`, " +
-                "`offered_item_modules`, `offered_Item_price_perone`, `requested_item_shortname`, `requested_item_skin_id`, `requested_item_blueprint`, " +
-                "`requested_item_condition`, `requested_Item_amount`, `requested_item_modules`, `order_commission`, " +
+                "`offered_item_weapon_info`, `offered_item_modules`, `offered_Item_price_perone`, " +
+
+                "`requested_item_shortname`, `requested_item_skin_id`, `requested_item_blueprint`, " +
+                "`requested_item_condition`, `requested_Item_amount`, `requested_item_weapon_info`, `requested_item_modules`, `order_commission`, " +
                 "`order_total_price`, `order_date`, `order_is_active`) VALUES(" +
 
                 $"'{player.UserIDString}', " +
@@ -270,7 +194,8 @@ namespace Oxide.Plugins
                 $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.Blueprint.ToString() : "NULL")}', " +
                 $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.Condition.ToString() : "NULL")}', " +
                 $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.SkinID.ToString() : "NULL")}', " +
-                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.Amount.ToString() : "NULL")}', " +
+                $"'{((playerOrder.OfferedItem != null) ? playerOrder.AmountOfOfferedItem.ToString() : "NULL")}', " +
+                $"'{((playerOrder.OfferedItem.Weapon != null) ? converWeaponInfoToString(playerOrder.OfferedItem.Weapon) : "NULL")}', " +
                 $"'{((playerOrder.OfferedItem.Content != null) ? converItemContentListFromListToString(playerOrder.OfferedItem.Content) : "NULL")}', " +
                 $"'{((playerOrder.OfferedItem != null) ? playerOrder.ExpectedPrice.ToString() : "NULL")}', " +
 
@@ -279,15 +204,21 @@ namespace Oxide.Plugins
                 $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.Blueprint.ToString() : "NULL")}', " +
                 $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.Condition.ToString() : "NULL")}', " +
                 $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.Amount.ToString() : "NULL")}', " +
+                $"'{(((playerOrder.RequestedItem != null) && (playerOrder.RequestedItem.Weapon != null)) ? converWeaponInfoToString(playerOrder.RequestedItem.Weapon) : "NULL")}', " +
                 $"'{(((playerOrder.RequestedItem != null) && (playerOrder.RequestedItem.Content != null)) ? converItemContentListFromListToString(playerOrder.RequestedItem.Content) : "NULL")}', " +
 
                 $"'{playerOrder.TotalPrice}', '{playerOrder.Commission}', CURRENT_TIMESTAMP, '0')";
 
-            PrintWarning(querry);
+            //PrintWarning(querry);
 
-            _mySql.Insert(Core.Database.Sql.Builder.Append(querry), _mySqlConnection);
-/*
-            testList();*/
+            _mySql.Insert(Core.Database.Sql.Builder.Append(querry), _mySqlConnection, list => {
+                removeItemFromPlayerInventory(player);
+                StopCreatingOrder(player);
+            });
+
+
+
+            //drawAllOrdersInfoToConsole();
         }
 
 
@@ -332,7 +263,7 @@ namespace Oxide.Plugins
                     playerOrder.OfferedItem.DB_ID = (int)list.FirstOrDefault()["item_id"];
 
                     FinishCreatingOrder(player);
-                    //testList();
+                    //drawAllOrdersInfoToConsole();
                     //StopCreatingOrder(player);
                 }
                 else
@@ -535,6 +466,7 @@ namespace Oxide.Plugins
             }
             return item;
         }
+
 
 
         private string converItemContentListFromListToString(List<ItemContent> itemContent)
@@ -1488,14 +1420,14 @@ namespace Oxide.Plugins
                                 new CuiLabel
                                 {
                                    Text = {
-                                        Text = offered_Item_amount,
+                                        Text =  formatNumberToPrice(offered_Item_amount.ToString()),
                                         FontSize = 13,
                                         Align = TextAnchor.MiddleCenter,
                                         FadeIn = fadeIn,
                                     },
                                     RectTransform = {
-                                        AnchorMin = "0.50 0",      // лево  низ
-                                        AnchorMax = "0.61 1",       // право верх
+                                        AnchorMin = "0.45 0",      // лево  низ
+                                        AnchorMax = "0.66 1",       // право верх
                                     }
                                 },
                                 $"{Layer}.BaraholkaUI.rightPanel.tableWithOrders.row{i}",
@@ -1507,14 +1439,14 @@ namespace Oxide.Plugins
                                 new CuiLabel
                                 {
                                    Text = {
-                                        Text = offered_Item_price_perone,
+                                        Text = $"{formatNumberToPrice(offered_Item_price_perone.ToString())} GT",
                                         FontSize = 13,
                                         Align = TextAnchor.MiddleCenter,
                                         FadeIn = fadeIn,
                                     },
                                     RectTransform = {
-                                        AnchorMin = "0.67 0",      // лево  низ
-                                        AnchorMax = "0.73 1",       // право верх
+                                        AnchorMin = "0.60 0",      // лево  низ
+                                        AnchorMax = "0.8 1",       // право верх
                                     }
                                 },
                                 $"{Layer}.BaraholkaUI.rightPanel.tableWithOrders.row{i}",
@@ -1575,8 +1507,7 @@ namespace Oxide.Plugins
 
                         counter++;
                     }
-                    PrintWarning(list.Count.ToString());
-
+                    
                     // если дойдет до последней страницы в ней !!!!!! нужно учесть ситуацию, когда НА ПОСЛЕДНЕЙ 64
                     if (list.Count >= 64)
                     {
@@ -1640,9 +1571,6 @@ namespace Oxide.Plugins
                     int pagesAmount = Convert.ToInt16(Math.Ceiling(list.Count / 8.00));
                     for (int i = 0; i < pagesAmount; i++)
                     {
-                        PrintWarning($"i: {(pagesAmount - i - 1) + startIndex * 8 + 1}");
-
-
                         CuiHelper.AddUi(player, new CuiElementContainer
                         {
                             {
@@ -2521,8 +2449,6 @@ namespace Oxide.Plugins
         [ConsoleCommand("baraholkaui.setamount_offereditem")]
         private void setamount_offereditem(ConsoleSystem.Arg args)
         {
-            PrintWarning($"setamount_offereditem: {args.GetInt(1).ToString()}");
-
             BasePlayer player = FindBasePlayer(args.GetString(0));
             if (player == null) return;
 
@@ -2532,9 +2458,6 @@ namespace Oxide.Plugins
 
             if (amount > 0)
             {
-                PrintError($"playerOrder.OfferedItem.maxOfferedAmount {playerOrder.OfferedItem.maxOfferedAmount}");
-                PrintError($"amount {amount}");
-
                 if (playerOrder.OfferedItem.maxOfferedAmount < amount)
                 {
                     drawMessageCreatingOrder(player, $"Выбрано максимально доступное значение: {playerOrder.OfferedItem.maxOfferedAmount}");
@@ -2545,7 +2468,8 @@ namespace Oxide.Plugins
                 calculateCreatingOrder(player.UserIDString);
             } else
             {
-                drawMessageCreatingOrder(player, $"Введите правильное кол-во!");
+                drawMessageCreatingOrder(player, $"Выбрано максимально доступное значение: {playerOrder.OfferedItem.maxOfferedAmount}");
+                playerOrder.AmountOfOfferedItem = playerOrder.OfferedItem.maxOfferedAmount;
             }
 
         }
@@ -2583,12 +2507,11 @@ namespace Oxide.Plugins
 
             BOrder bOrder = FindBOrder(player.UserIDString);
 
-
             string selectedItemShortname = bOrder.inventory[id].ShortName;
-            int selectedItemAmount = bOrder.inventory[id].Amount;
-            ulong selectedItemSkinId = bOrder.inventory[id].SkinID;
-            float selectedItemCondition = bOrder.inventory[id].Condition;
-            int selectedItemBluePrint = bOrder.inventory[id].Blueprint;
+            int selectedItemAmount       = bOrder.inventory[id].Amount;
+            ulong selectedItemSkinId     = bOrder.inventory[id].SkinID;
+            float selectedItemCondition  = bOrder.inventory[id].Condition;
+            int selectedItemBluePrint    = bOrder.inventory[id].Blueprint;
 
             Weapon selectedItemWeapon = bOrder.inventory[id].Weapon;
             List<ItemContent> selectedItemContent = bOrder.inventory[id].Content;
@@ -2601,12 +2524,16 @@ namespace Oxide.Plugins
 
             int selectedItemAmounTotal = 0;
             int counter = 0;
+            bOrder.offeredItemIdsInPlayerInventory.Clear();
+
             foreach (var item in player.inventory.containerMain.itemList)
             {
                 CuiHelper.DestroyUi(player, $"{LayerModal}.create_order-wrap.main_left.smallblock_{counter}.border");
 
                 if (isItemsEquals(item, selectedItem))
                 {
+                    bOrder.offeredItemIdsInPlayerInventory.Add(counter);
+
                     selectedItemAmounTotal += item.amount;
                     CuiHelper.AddUi(player, new CuiElementContainer {
                         {
@@ -2665,7 +2592,7 @@ namespace Oxide.Plugins
                     new CuiLabel
                     {
                         Text = {
-                            Text = $"{formatNumberToPrice(((selectedItemAmounTotal <= ITEM_AMOUNT_MAXIMUM) ? selectedItemAmounTotal : ITEM_AMOUNT_MAXIMUM).ToString())}",
+                            Text = $"x{formatNumberToPrice(((selectedItemAmounTotal <= ITEM_AMOUNT_MAXIMUM) ? selectedItemAmounTotal : ITEM_AMOUNT_MAXIMUM).ToString())}",
                             FontSize = 12,
                             Align = TextAnchor.LowerRight,
                         },
@@ -2689,14 +2616,6 @@ namespace Oxide.Plugins
 
         private bool isItemsEquals(Item item1, Item item2)
         {
-
-            PrintWarning($"maxConditionNormalized: {item1.maxConditionNormalized}");
-            PrintWarning($"conditionNormalized: {item1.conditionNormalized}");
-            PrintWarning($"maxCondition: {item1.maxCondition}");
-
-            PrintWarning($"item1.condition  {item1.condition }");
-            PrintWarning($"item2.condition  {item2.condition }");
-
             if (item1.info.shortname != item2.info.shortname)
                 return false;
 
@@ -2762,8 +2681,6 @@ namespace Oxide.Plugins
             if (player == null) return;
 
             CuiHelper.DestroyUi(player, $"{LayerModal}.create_order-wrap");
-            //CuiHelper.DestroyUi(player, $"create_order-black");
-
             StopCreatingOrder(player);
         }
 
@@ -3228,12 +3145,12 @@ namespace Oxide.Plugins
                     new CuiButton
                     {
                         Text = {
-                            Text = "Подтвердить",
+                            Text = "Введите всю информацию..",
                             FontSize = 17,
                             Align = TextAnchor.MiddleCenter
                         },
                         Button = {
-                            Command = $"baraholkaui.finish_creating_order {player.UserIDString}",
+                            Command = $"",
                             Color = "0 0 0 0.85"
                         },
                         RectTransform = {
@@ -3260,7 +3177,6 @@ namespace Oxide.Plugins
                 // отрисовка пустых блоков...
                 if (i >= player.inventory.containerMain.itemList.Count)
                 {
-                    PrintWarning($"i : {i}");
                     CuiHelper.AddUi(player, new CuiElementContainer
                     {
                         {
@@ -3554,23 +3470,30 @@ namespace Oxide.Plugins
                     $"{LayerModal}.create_order-wrap.main_right.btn-wrap.btn"
                 }
             });
-
-
-            PrintError("Отрисовать");
         }
 
 
         [ConsoleCommand("baraholkaui.finish_creating_order")]
         private void finish_creating_order(ConsoleSystem.Arg args)
         {
-            PrintError("заканчиваю...");
-
             BasePlayer player = FindBasePlayer(args.GetString(0));
             if (player == null) return;
 
+
+            ActiveUsers user = findUserInActiveUsersList(player.UserIDString);
             BOrder playerOrder = FindBOrder(player.UserIDString);
 
-            FinishCreatingOrder(player);
+            if (user.Money >= playerOrder.Commission)
+            {
+                CuiHelper.DestroyUi(player, $"{LayerModal}.create_order-wrap");
+
+                FinishCreatingOrder(player);
+            }
+            else
+            {
+                drawMessageCreatingOrder(player,"У вас нехватает денег, чтобы выплатить комиссию");
+                SendReply(player, $"У вас не хватает денег, чтобы выплатить комиссию");
+            }
         }
         private void drawMessageCreatingOrder(BasePlayer player, string value)
         {
@@ -3650,6 +3573,28 @@ namespace Oxide.Plugins
 
         }
 
+        private void removeItemFromPlayerInventory (BasePlayer player)
+        {
+            BOrder bOrder = FindBOrder(player.UserIDString);
+
+            foreach (int ids in bOrder.offeredItemIdsInPlayerInventory)
+            {
+                Item item = player.inventory.containerMain.itemList[ids];
+
+                if (item.amount <= bOrder.AmountOfOfferedItem)
+                {
+                    PrintWarning($"{bOrder.AmountOfOfferedItem} - {item.amount} = {bOrder.AmountOfOfferedItem - item.amount}");
+                    bOrder.AmountOfOfferedItem -= item.amount;
+                    item.Remove();
+                }
+                else
+                {
+                    item.amount -= (int)bOrder.AmountOfOfferedItem;
+                    bOrder.AmountOfOfferedItem = 0;
+                }
+            }
+        }
+
         private void calculateCreatingOrder(string userId)
         {
             BasePlayer player = FindBasePlayer(userId);
@@ -3657,14 +3602,12 @@ namespace Oxide.Plugins
 
             if (playerOrder.OfferedItem == null)
             {
-                PrintWarning("Выберите предмет...");
                 drawMessageCreatingOrder(player, "Выберите предмет...");
                 return;
             }
 
             if (playerOrder.AmountOfOfferedItem <= 0)
             {
-                PrintWarning("Введите кол-во предметов...");
                 drawMessageCreatingOrder(player, "Введите кол-во предметов...");
                 return;
             }
@@ -3678,8 +3621,6 @@ namespace Oxide.Plugins
 
             int basePrice = findBasePrice(playerOrder.OfferedItem.ShortName);
 
-            PrintWarning($"basePrice: {basePrice}");
-
             if (basePrice <= 0)
             {
                 drawMessageCreatingOrder(player, $"Этот предмет НЕЛЬЗЯ продавать!");
@@ -3689,24 +3630,16 @@ namespace Oxide.Plugins
 
 
             Int64 totalPriceRequestedItems = playerOrder.AmountOfOfferedItem * basePrice;
-            Int64 totalPriceOfferedItems = playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice;
-
-            Puts("");
+            Int64 totalPriceOfferedItems   = playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice;
 
             playerOrder.Commission = getCommission(totalPriceRequestedItems, totalPriceOfferedItems);
             playerOrder.TotalPrice = playerOrder.ExpectedPrice - playerOrder.Commission;
-
-            PrintWarning($"totalPriceRequestedItems: {playerOrder.AmountOfOfferedItem} * {basePrice} = {formatNumberToPrice(totalPriceRequestedItems.ToString())}");
-            PrintWarning($"totalPriceOfferedItems: {playerOrder.AmountOfOfferedItem} * {playerOrder.ExpectedPrice} = {formatNumberToPrice(totalPriceOfferedItems.ToString())}");
-            PrintWarning($"Commission: {playerOrder.Commission}");
-            PrintWarning($"Total price: {playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice}");
 
             drawCommission(player, $"{playerOrder.Commission}");
             drawTotalPrice(player, $"{playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice}");
 
             drawMessageCreatingOrder(player, $"Кол-во: {playerOrder.AmountOfOfferedItem},  Выручка: {playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice - playerOrder.Commission} GT");
             setConfirmBtnStatus(player, true);
-            PrintError("Отладка блять");
         }
 
         #region Интерфейс UI
@@ -3715,6 +3648,8 @@ namespace Oxide.Plugins
             PrintWarning("OpenBaraholka");
 
             //player.SendConsoleCommand($"baraholkaui.draworders {player.UserIDString} ALL"); //человек первый раз открыл барахолку - отрисовываем предметы инвентаря
+            double width = 0.25;
+            double offset = 0.007;
 
             var MainContainer = new CuiElementContainer
             {
@@ -3949,134 +3884,401 @@ namespace Oxide.Plugins
                 },
                 #endregion
 
-                #region кнопка "ресурсы"
-                // кнопка "ресурсы"
-                {
-                    new CuiPanel
+                #region Первая полоса
+                    #region кнопка "ресурсы"
+                    // кнопка "ресурсы"
                     {
-                        Image = {
-                            Color = GreenLightColor,
-                            Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
-                            Material = "assets/content/ui/uibackgroundblur.mat",
+                        new CuiPanel
+                        {
+                            Image = {
+                                Color = GreenLightColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat",
+                            },
+                            RectTransform = {
+                                AnchorMin = $"0 0.833",      // лево  низ
+                                AnchorMax = $"{width - offset} 0.874"       // право верх
+                            }
                         },
-                        RectTransform = {
-                            AnchorMin = "0 0.833",      // лево  низ
-                            AnchorMax = "0.997 0.874"       // право верх
-                        }
-                    },
-                    $"{Layer}.BaraholkaUI.leftPanel",
-                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces"
-                },
-
-                //  Кнопка Ресурсы
-                {
-                    new CuiButton
-                    {
-                        Text = {
-                            Text = "Ресурсы",
-                            FontSize = 11,
-                            Align = TextAnchor.MiddleLeft,
-                        },
-                        Button = {
-                            Command  =  $"baraholkaui.drawfilter {player.UserIDString} Resources 0 standing",
-                            Color    = "0 0 0 0",
-                        },
-                        RectTransform = {
-                            AnchorMin = "0 0",
-                            AnchorMax = "1 1",
-                            OffsetMin = "10 0"
-                        },
+                        $"{Layer}.BaraholkaUI.leftPanel",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces"
                     },
 
-                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces",
-                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces.title"
-                },
+                    //  Кнопка Ресурсы
+                    {
+                        new CuiButton
+                        {
+                            Text = {
+                                Text = "Ресурсы",
+                                FontSize = 11,
+                                Align = TextAnchor.MiddleCenter,
+                            },
+                            Button = {
+                                Command  =  $"baraholkaui.drawfilter {player.UserIDString} Resources 0 standing",
+                                Color    = "0 0 0 0",
+                            },
+                            RectTransform = {
+                                AnchorMin = "0 0",
+                                AnchorMax = "1 1",
+                            },
+                        },
+
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces.title"
+                    },
+                    #endregion
+
+                    #region Конструкции
+                    // кнопка "Конструкции"
+                    {
+                        new CuiPanel
+                        {
+                            Image = {
+                                Color = GreenLightColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat",
+                            },
+                            RectTransform = {
+                                AnchorMin = $"{width + offset/2} 0.833",      // лево  низ
+                                AnchorMax = $"{width*2 - offset/2} 0.874"       // право верх
+                            }
+                        },
+                        $"{Layer}.BaraholkaUI.leftPanel",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces"
+                    },
+
+                    //  Кнопка Конструкции
+                    {
+                        new CuiButton
+                        {
+                            Text = {
+                                Text = "Конструкции",
+                                FontSize = 11,
+                                Align = TextAnchor.MiddleCenter,
+                            },
+                            Button = {
+                                Command  =  $"baraholkaui.drawfilter {player.UserIDString} Resources 0 standing",
+                                Color    = "0 0 0 0",
+                            },
+                            RectTransform = {
+                                AnchorMin = "0 0",
+                                AnchorMax = "1 1",
+                            },
+                        },
+
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces.title"
+                    },
+                    #endregion
+
+                    #region Декор
+                    // кнопка "Декор"
+                    {
+                        new CuiPanel
+                        {
+                            Image = {
+                                Color = GreenLightColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat",
+                            },
+                            RectTransform = {
+                                AnchorMin = $"{width*2 + offset} 0.833",      // лево  низ
+                                AnchorMax = $"0.997 0.874"       // право верх
+                            }
+                        },
+                        $"{Layer}.BaraholkaUI.leftPanel",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces"
+                    },
+
+                    //  Кнопка Декор
+                    {
+                        new CuiButton
+                        {
+                            Text = {
+                                Text = "Декор",
+                                FontSize = 11,
+                                Align = TextAnchor.MiddleCenter,
+                            },
+                            Button = {
+                                Command  =  $"baraholkaui.drawfilter {player.UserIDString} Resources 0 standing",
+                                Color    = "0 0 0 0",
+                            },
+                            RectTransform = {
+                                AnchorMin = "0 0",
+                                AnchorMax = "1 1",
+                            },
+                        },
+
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces.title"
+                    },
+                #endregion
                 #endregion
 
-                #region кнопка "Компоненты"
-                // кнопка "ресурсы"
-                {
-                    new CuiPanel
+                #region вторая полоса
+                    #region кнопка "Оружие"
+                    // кнопка "Оружие"
                     {
-                        Image = {
-                            Color = GreenLightColor,
-                            Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
-                            Material = "assets/content/ui/uibackgroundblur.mat",
+                        new CuiPanel
+                        {
+                            Image = {
+                                Color = GreenLightColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat",
+                            },
+                            RectTransform = {
+                                AnchorMin = $"0 0.787",      // лево  низ
+                                AnchorMax = $"{width*2 - offset/2} 0.828"       // право верх
+                            }
                         },
-                        RectTransform = {
-                            AnchorMin = "0 0.787",      // лево  низ
-                            AnchorMax = "0.997 0.828"       // право верх
-                        }
-                    },
-                    $"{Layer}.BaraholkaUI.leftPanel",
-                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_components"
-                },
-
-                //  Кнопка Компоненты
-                {
-                    new CuiButton
-                    {
-                        Text = {
-                            Text = "Компоненты",
-                            FontSize = 11,
-                            Align = TextAnchor.MiddleLeft,
-                        },
-                        Button = {
-                            Command  =  $"baraholkaui.drawfilter {player.UserIDString} Components 0 standing",
-                            Color    = "0 0 0 0",
-                        },
-                        RectTransform = {
-                            AnchorMin = "0 0",
-                            AnchorMax = "1 1",
-                            OffsetMin = "10 0"
-                        },
+                        $"{Layer}.BaraholkaUI.leftPanel",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces"
                     },
 
-                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_components",
-                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_components.title"
-                },
+                    //  Кнопка Оружие
+                    {
+                        new CuiButton
+                        {
+                            Text = {
+                                Text = "Оружие",
+                                FontSize = 11,
+                                Align = TextAnchor.MiddleCenter,
+                            },
+                            Button = {
+                                Command  =  $"baraholkaui.drawfilter {player.UserIDString} Weapons 0 standing",
+                                Color    = "0 0 0 0",
+                            },
+                            RectTransform = {
+                                AnchorMin = "0 0",
+                                AnchorMax = "1 1",
+                            },
+                        },
+
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces.title"
+                    },
+                    #endregion
+
+                    #region Конструкции
+                    // кнопка "Конструкции"
+                    {
+                        new CuiPanel
+                        {
+                            Image = {
+                                Color = GreenLightColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat",
+                            },
+                            RectTransform = {
+                                AnchorMin = $"{width*2 + offset} 0.787",      // лево  низ
+                                AnchorMax = $"{width*3 - offset} 0.828"       // право верх
+                            }
+                        },
+                        $"{Layer}.BaraholkaUI.leftPanel",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces"
+                    },
+
+                    //  Кнопка Конструкции
+                    {
+                        new CuiButton
+                        {
+                            Text = {
+                                Text = "Конструкции",
+                                FontSize = 11,
+                                Align = TextAnchor.MiddleCenter,
+                            },
+                            Button = {
+                                Command  =  $"baraholkaui.drawfilter {player.UserIDString} Resources 0 standing",
+                                Color    = "0 0 0 0",
+                            },
+                            RectTransform = {
+                                AnchorMin = "0 0",
+                                AnchorMax = "1 1",
+                            },
+                        },
+
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces.title"
+                    },
+                    #endregion
+
+                    #region Декор
+                    // кнопка "Декор"
+                    {
+                        new CuiPanel
+                        {
+                            Image = {
+                                Color = GreenLightColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat",
+                            },
+                            RectTransform = {
+                                AnchorMin = $"{width*3 + offset/2} 0.787",      // лево  низ
+                                AnchorMax = $"0.997 0.828"       // право верх
+                            }
+                        },
+                        $"{Layer}.BaraholkaUI.leftPanel",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces"
+                    },
+
+                    //  Кнопка Декор
+                    {
+                        new CuiButton
+                        {
+                            Text = {
+                                Text = "Декор",
+                                FontSize = 11,
+                                Align = TextAnchor.MiddleCenter,
+                            },
+                            Button = {
+                                Command  =  $"baraholkaui.drawfilter {player.UserIDString} Resources 0 standing",
+                                Color    = "0 0 0 0",
+                            },
+                            RectTransform = {
+                                AnchorMin = "0 0",
+                                AnchorMax = "1 1",
+                            },
+                        },
+
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces.title"
+                    },
+                    #endregion
                 #endregion
 
-                #region кнопка "Оружие"
-                {
-                    new CuiPanel
+               #region Третья полоса
+                    #region кнопка "ресурсы"
+                    // кнопка "ресурсы"
                     {
-                        Image = {
-                            Color = GreenLightColor,
-                            Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
-                            Material = "assets/content/ui/uibackgroundblur.mat",
+                        new CuiPanel
+                        {
+                            Image = {
+                                Color = GreenLightColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat",
+                            },
+                            RectTransform = {
+                                AnchorMin = $"0 0.741",      // лево  низ
+                                AnchorMax = $"{width - offset} 0.782"       // право верх
+                            }
                         },
-                        RectTransform = {
-                            AnchorMin = "0 0.741",      // лево  низ
-                            AnchorMax = "0.997 0.782"   // право верх
-                        }
-                    },
-                    $"{Layer}.BaraholkaUI.leftPanel",
-                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_weapons"
-                },
-                {
-                    new CuiButton
-                    {
-                        Text = {
-                            Text = "Оружие",
-                            FontSize = 11,
-                            Align = TextAnchor.MiddleLeft,
-                        },
-                        Button = {
-                            Command  = $"baraholkaui.drawfilter {player.UserIDString} Weapons 0 standing",
-                            Color    = "0 0 0 0",
-                        },
-                        RectTransform = {
-                            AnchorMin = "0 0",
-                            AnchorMax = "1 1",
-                            OffsetMin = "10 0"
-                        },
+                        $"{Layer}.BaraholkaUI.leftPanel",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces"
                     },
 
-                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_weapons",
-                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_weapons.title"
-                },
+                    //  Кнопка Ресурсы
+                    {
+                        new CuiButton
+                        {
+                            Text = {
+                                Text = "Ресурсы",
+                                FontSize = 11,
+                                Align = TextAnchor.MiddleCenter,
+                            },
+                            Button = {
+                                Command  =  $"baraholkaui.drawfilter {player.UserIDString} Resources 0 standing",
+                                Color    = "0 0 0 0",
+                            },
+                            RectTransform = {
+                                AnchorMin = "0 0",
+                                AnchorMax = "1 1",
+                            },
+                        },
+
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces.title"
+                    },
+                    #endregion
+
+                    #region Конструкции
+                    // кнопка "Конструкции"
+                    {
+                        new CuiPanel
+                        {
+                            Image = {
+                                Color = GreenLightColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat",
+                            },
+                            RectTransform = {
+                                AnchorMin = $"{width + offset/2} 0.741",      // лево  низ
+                                AnchorMax = $"{width*2 - offset/2} 0.782"       // право верх
+                            }
+                        },
+                        $"{Layer}.BaraholkaUI.leftPanel",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces"
+                    },
+
+                    //  Кнопка Конструкции
+                    {
+                        new CuiButton
+                        {
+                            Text = {
+                                Text = "Конструкции",
+                                FontSize = 11,
+                                Align = TextAnchor.MiddleCenter,
+                            },
+                            Button = {
+                                Command  =  $"baraholkaui.drawfilter {player.UserIDString} Resources 0 standing",
+                                Color    = "0 0 0 0",
+                            },
+                            RectTransform = {
+                                AnchorMin = "0 0",
+                                AnchorMax = "1 1",
+                            },
+                        },
+
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces.title"
+                    },
+                    #endregion
+
+                    #region Декор
+                    // кнопка "Декор"
+                    {
+                        new CuiPanel
+                        {
+                            Image = {
+                                Color = GreenLightColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat",
+                            },
+                            RectTransform = {
+                                AnchorMin = $"{width*2 + offset} 0.741",      // лево  низ
+                                AnchorMax = $"0.997 0.782"       // право верх
+                            }
+                        },
+                        $"{Layer}.BaraholkaUI.leftPanel",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces"
+                    },
+
+                    //  Кнопка Декор
+                    {
+                        new CuiButton
+                        {
+                            Text = {
+                                Text = "Декор",
+                                FontSize = 11,
+                                Align = TextAnchor.MiddleCenter,
+                            },
+                            Button = {
+                                Command  =  $"baraholkaui.drawfilter {player.UserIDString} Resources 0 standing",
+                                Color    = "0 0 0 0",
+                            },
+                            RectTransform = {
+                                AnchorMin = "0 0",
+                                AnchorMax = "1 1",
+                            },
+                        },
+
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces",
+                        $"{Layer}.BaraholkaUI.leftPanel.filterBTN_resouces.title"
+                    },
+                    #endregion
                 #endregion
+
+
+                
 
                 #region кнопка "Разное"
                 // кнопка "ресурсы"
@@ -4090,7 +4292,7 @@ namespace Oxide.Plugins
                         },
                         RectTransform = {
                             AnchorMin = "0 0.694",      // лево  низ
-                            AnchorMax = "0.997 0.735"       // право верх
+                            AnchorMax = $"{width - offset} 0.735"       // право верх
                         }
                     },
                     $"{Layer}.BaraholkaUI.leftPanel",
@@ -4104,7 +4306,7 @@ namespace Oxide.Plugins
                         Text = {
                             Text = "Разное",
                             FontSize = 11,
-                            Align = TextAnchor.MiddleLeft,
+                            Align = TextAnchor.MiddleCenter,
                         },
                         Button = {
                             Command  =  $"baraholkaui.drawfilter {player.UserIDString} Other 0 standing",
@@ -4113,7 +4315,129 @@ namespace Oxide.Plugins
                         RectTransform = {
                             AnchorMin = "0 0",
                             AnchorMax = "0.997 1",
-                            OffsetMin = "10 0"
+                        },
+                    },
+
+                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_other",
+                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_other.title"
+                },
+
+                // кнопка "ресурсы"
+                {
+                    new CuiPanel
+                    {
+                        Image = {
+                            Color = GreenLightColor,
+                            Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                            Material = "assets/content/ui/uibackgroundblur.mat",
+                        },
+                        RectTransform = {
+                            AnchorMin = $"{width + offset/2} 0.694",      // лево  низ
+                            AnchorMax = $"{width*2 - offset/2} 0.735"       // право верх
+                        }
+                    },
+                    $"{Layer}.BaraholkaUI.leftPanel",
+                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_other"
+                },
+
+                //  Кнопка Разное
+                {
+                    new CuiButton
+                    {
+                        Text = {
+                            Text = "Разное",
+                            FontSize = 11,
+                            Align = TextAnchor.MiddleCenter,
+                        },
+                        Button = {
+                            Command  =  $"baraholkaui.drawfilter {player.UserIDString} Other 0 standing",
+                            Color    = "0 0 0 0",
+                        },
+                        RectTransform = {
+                            AnchorMin = "0 0",
+                            AnchorMax = "0.997 1",
+                        },
+                    },
+
+                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_other",
+                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_other.title"
+                },
+
+                 // кнопка "ресурсы"
+                {
+                    new CuiPanel
+                    {
+                        Image = {
+                            Color = GreenLightColor,
+                            Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                            Material = "assets/content/ui/uibackgroundblur.mat",
+                        },
+                        RectTransform = {
+                            AnchorMin = $"{width*2 + offset} 0.694",      // лево  низ
+                            AnchorMax = $"{width*3 - offset} 0.735"       // право верх
+                        }
+                    },
+                    $"{Layer}.BaraholkaUI.leftPanel",
+                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_other"
+                },
+
+                //  Кнопка Разное
+                {
+                    new CuiButton
+                    {
+                        Text = {
+                            Text = "Разное",
+                            FontSize = 11,
+                            Align = TextAnchor.MiddleCenter,
+                        },
+                        Button = {
+                            Command  =  $"baraholkaui.drawfilter {player.UserIDString} Other 0 standing",
+                            Color    = "0 0 0 0",
+                        },
+                        RectTransform = {
+                            AnchorMin = "0 0",
+                            AnchorMax = "0.997 1",
+                        },
+                    },
+
+                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_other",
+                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_other.title"
+                },
+
+                 // кнопка "ресурсы"
+                {
+                    new CuiPanel
+                    {
+                        Image = {
+                            Color = GreenLightColor,
+                            Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                            Material = "assets/content/ui/uibackgroundblur.mat",
+                        },
+                        RectTransform = {
+                            AnchorMin = $"{width*3 + offset/2} 0.694",      // лево  низ
+                            AnchorMax = $"{width*4 - offset/2} 0.735"       // право верх
+                        }
+                    },
+                    $"{Layer}.BaraholkaUI.leftPanel",
+                    $"{Layer}.BaraholkaUI.leftPanel.filterBTN_other"
+                },
+
+                //  Кнопка Разное
+                {
+                    new CuiButton
+                    {
+                        Text = {
+                            Text = "Разное",
+                            FontSize = 11,
+                            Align = TextAnchor.MiddleCenter,
+                        },
+                        Button = {
+                            Command  =  $"baraholkaui.drawfilter {player.UserIDString} Other 0 standing",
+                            Color    = "0 0 0 0",
+                        },
+                        RectTransform = {
+                            AnchorMin = "0 0",
+                            AnchorMax = "0.997 1",
                         },
                     },
 
@@ -4301,7 +4625,7 @@ namespace Oxide.Plugins
                     new CuiButton
                     {
                         Text = {
-                            Text = "Цена",
+                            Text = "Цена (за 1 шт.)",
                             FontSize = 12,
                             Align = TextAnchor.MiddleCenter,
                         },
@@ -4384,6 +4708,7 @@ namespace Oxide.Plugins
             public BItem RequestedItem; // User wanted to change for RequestedItem item
 
             public List<BItem> inventory = new List<BItem>(); // list of all inventory items - needs for selection item while creating order
+            public List<int> offeredItemIdsInPlayerInventory = new List<int>();
 
             public Int64 AmountOfOfferedItem = 0;
             public Int64 AmountOfRequestedItem = 0;
