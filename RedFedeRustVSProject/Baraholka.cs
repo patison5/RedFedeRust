@@ -64,17 +64,15 @@ namespace Oxide.Plugins
         private static string LayerModal => "BaraholkaUIMainLayerModal";
         private static string Base => "baraholka";
 
-        public string GreenDarkColor    { get; }  = HexToCuiColor("1f5a49");
-        public string GreenLightColor   { get; }  = HexToCuiColor("236956");
-        public string GreenLightColor2  { get; }  = HexToCuiColor("287862");
-        public string PinkDarkColor     { get; }  = HexToCuiColor("4d2247");
-        public string BlueLightColor    { get; }  = HexToCuiColor("1f9e94");
+        public string GreenDarkColor { get; } = HexToCuiColor("1f5a49");
+        public string GreenLightColor { get; } = HexToCuiColor("236956");
+        public string GreenLightColor2 { get; } = HexToCuiColor("287862");
+        public string PinkDarkColor { get; } = HexToCuiColor("4d2247");
+        public string BlueLightColor { get; } = HexToCuiColor("1f9e94");
 
         private const int ITEM_AMOUNT_MAXIMUM = 150000;
 
         [PluginReference] private Plugin ImageLibrary;
-
-        [PluginReference] private Plugin BetterUI;
 
         private readonly Core.MySql.Libraries.MySql _mySql = Interface.Oxide.GetLibrary<Core.MySql.Libraries.MySql>();
         private Core.Database.Connection _mySqlConnection;
@@ -83,78 +81,16 @@ namespace Oxide.Plugins
 
         #endregion
 
-
-
         private void OnServerInitialized()
         {
             //getAllUrls();
             _mySqlConnection = _mySql.OpenDb(Config["host"].ToString(), Convert.ToInt32(Config["port"]), Config["database"].ToString(), Config["username"].ToString(), Config["password"].ToString(), this);
 
-            /*
-            BasePlayer pl = BasePlayer.FindSleeping("76561198033885552");
-
-            if (pl != null)
-            {
-                PrintWarning(pl.displayName);
-
-
-                addItemToPlayerInventory(pl, "rifle.ak", 1);
-                checkIfPlayerHasItem(pl, "rifle.ak");
-                RemoveItemFromPlayerInventory(pl, "rifle.ak", 1);
-
-               // createOrder(100, pl.UserIDString, 10, "metal.refined", false);
-            }
-
-            //CheckPlayerInDatabase(1235, "Lulex.pyy");
-            */
-
-            if (!ImageLibrary)
-            {
-                PrintError("Donwload and install ImageLibrary to work with this plugin...");
-            }
-
-            /*
-            BasePlayer player = FindBasePlayer("76561198077282054"); 
-            CuiHelper.DestroyUi(player, Layer);
-            CuiHelper.AddUi(player, OpenBaraholka(player));*/
-
-            //player.SendConsoleCommand($"baraholkaui.drawfilter {player.UserIDString} Weapons");   //11111
-            //player.SendConsoleCommand($"baraholkaui.createorder {player.UserIDString}");   //11111
-
-
-            //BasePlayer player1 = FindBasePlayer("76561198428983821");
-            //closeBaraholkaUI(player1);
-            //CuiHelper.AddUi(player1, OpenBaraholka(player1));
-            //player.SendConsoleCommand($"baraholkaui.draworders {player1.UserIDString}");
+            if (!ImageLibrary) PrintError("Donwload and install ImageLibrary to work with this plugin...");
 
             BasePlayer player = FindBasePlayer("76561198077282054");
             CuiHelper.DestroyUi(player, Layer);
             CuiHelper.DestroyUi(player, $"{LayerModal}.create_order-wrap");
-            //CuiHelper.DestroyUi(player, $"create_order-black");
-
-            //player.SendConsoleCommand($"baraholkaui.closemodal 76561198077282054");
-            //player.SendConsoleCommand($"baraholkaui.buysingleorder 76561198077282054");
-
-
-            /*if (!BetterUI)
-            {
-                PrintError("NO BetterUI found");
-            } else
-            {
-                *//*CuiElement confirmation = (CuiElement)BetterUI.Call("getRect");*//*
-                var confirmation = BetterUI.Call("CreateRect");
-
-                BetterUI.Call("setproperty", confirmation, "Name='Test', Color='0 0 0 0'");
-                BetterUI.Call("draw", confirmation);
-
-                //BetterUI.Call("getProperty", confirmation);
-
-            }*/
-
-
-
-            /*drawOrders2(player.UserIDString, 0, 1);*/
-
 
             if (ImageLibrary)
             {
@@ -162,36 +98,8 @@ namespace Oxide.Plugins
             }
         }
 
-        [ConsoleCommand("btest")]
-        void Btest(ConsoleSystem.Arg args)
-        {
-
-        }
-
-        [ConsoleCommand("badd")]
-        void Badd(ConsoleSystem.Arg args)
-        {
-            PrintWarning(getCommission(200000, 4000000).ToString());
-        }
-
-
-        [ConsoleCommand("bpl")]
-        void Bpl(ConsoleSystem.Arg args)
-        {
-            BasePlayer pl = BasePlayer.FindSleeping("76561198033885552");
-
-            if (pl != null)
-            {
-                RemoveItemFromPlayerInventory(pl, "sulfur", 1000000);
-                PrintWarning(checkIfPlayerHasItem(pl, "sulfur").ToString());
-            } else
-            {
-                PrintWarning("No Player Found!");
-            }
-        }
-
         private void OnPlayerInit(BasePlayer player)
-        { 
+        {
             PrintWarning($"{player.UserIDString} is connecting to the server. Let's check him in our database...");
 
             CheckPlayerInDatabase(player.userID, player.displayName);
@@ -206,108 +114,12 @@ namespace Oxide.Plugins
                 if (list.Count <= 0)
                     _mySql.Insert(Core.Database.Sql.Builder.Append($"INSERT INTO customer (steamid, username) VALUES('{userId}', '{username}')"), _mySqlConnection);
                 else
-                    _mySql.Insert(Core.Database.Sql.Builder.Append($"UPDATE customer SET username = '{username}' WHERE steamid = '{userId}'"), _mySqlConnection); 
+                    _mySql.Insert(Core.Database.Sql.Builder.Append($"UPDATE customer SET username = '{username}' WHERE steamid = '{userId}'"), _mySqlConnection);
             });
         }
 
-        private bool checkIfPlayerHasItem(BasePlayer player, string itemShortName)
-        {
-            foreach (var item in player.inventory.containerMain.itemList)
-            {
-                if (item.info.shortname == itemShortName)
-                {
-                    PrintWarning(item.info.shortname);
-                    PrintWarning(item.amount.ToString());
-                    return true;
-                }         
-            }
-            return false;
-        }
 
-
-        [ConsoleCommand("ttt")]
-        void printPlayerInventory ()
-        {
-            BasePlayer pl = BasePlayer.FindSleeping("76561198033885552");
-
-            if (pl == null)
-                return;
-
-            foreach (var item in pl.inventory.containerMain.itemList) { item.Remove(); }
-
-            GiveItem(pl.inventory,
-                    BuildItem("rifle.ak", 1, 0, 200, 0, new Weapon()
-                    {
-                        ammoAmount = 17,
-                        ammoType = "ammo.rifle"
-                    },
-                    new List<ItemContent>()
-                    {
-                        new ItemContent()
-                        {
-                            ShortName = "weapon.mod.flashlight",
-                            Condition = 200,
-                            Amount = 1
-                        },
-                        new ItemContent()
-                        {
-                            ShortName = "weapon.mod.8x.scope",
-                            Condition = 200,
-                            Amount = 1
-                        },
-                        new ItemContent()
-                        {
-                            ShortName = "weapon.mod.muzzlebrake",
-                            Condition = 200,
-                            Amount = 1
-                        }
-                    }),
-
-                    pl.inventory.containerMain);
-
-
-            foreach (var item in pl.inventory.containerMain.itemList)
-            {
-                PrintWarning(item.info.shortname);
-                if (item.info.category == ItemCategory.Weapon)
-                {
-                    
-                    BaseProjectile weapon = item.GetHeldEntity() as BaseProjectile;
-                    if (weapon != null)
-                    {
-                        PrintWarning($"Тип патронов: {weapon.primaryMagazine.ammoType.shortname}");
-                        PrintWarning($"Кол-во патронов: {weapon.primaryMagazine.contents}");
-                    }
-                    
-                    foreach (var cont in item.contents.itemList)
-                    {
-                        PrintWarning($"Название: {cont.info.shortname}");
-                        PrintWarning($"Кол-во: {cont.amount.ToString()}");
-                        PrintWarning($"condition: {cont.condition.ToString()}");
-                        Puts("");
-                    }       
-                }
-            }
-        }
-
-
-        [ConsoleCommand("tttest")]
-        void tttttest () {
-            string test = converWeaponInfoToString(new Weapon()
-            {
-                ammoAmount = 17,
-                ammoType = "ammo.rifle"
-            });
-
-            PrintWarning(test);
-        }
-
-        private void addItemToPlayerInventory(BasePlayer player, string itemShortName, int amount)
-        {
-            GiveItem(player.inventory, ItemManager.CreateByName(itemShortName, amount), player.inventory.containerMain);
-        }
-
-        private void RemoveItemFromPlayerInventory (BasePlayer player, string itemShortName, int amount)
+        private void RemoveItemFromPlayerInventory(BasePlayer player, string itemShortName, int amount)
         {
             foreach (var item in player.inventory.containerMain.itemList)
             {
@@ -324,8 +136,8 @@ namespace Oxide.Plugins
             }
         }
 
-        
-      
+
+
 
 
         [ConsoleCommand("step1")]
@@ -402,7 +214,7 @@ namespace Oxide.Plugins
         }
 
 
-        private void testList ()
+        private void testList()
         {
             Puts("Checking item's list");
 
@@ -412,7 +224,7 @@ namespace Oxide.Plugins
                 return;
             }
 
-            foreach(var order in _orders)
+            foreach (var order in _orders)
             {
                 PrintWarning($"Order owner: {order.UserIdString}");
 
@@ -428,7 +240,8 @@ namespace Oxide.Plugins
                     {
                         PrintWarning($"MODNAME: {cont.ShortName}");
                     }
-                } else
+                }
+                else
                 {
                     PrintWarning($"Item: {order.OfferedItem.ShortName}");
                 }
@@ -441,59 +254,10 @@ namespace Oxide.Plugins
             }
         }
 
-        [ConsoleCommand("get")]
-        void getit()
-        {
-            GetActiveOrders(BasePlayer.FindSleeping("76561198033885552"));
-        }
-        private void GetActiveOrders(BasePlayer player)
-        {
-            List<BOrder> _tmpOrders = new List<BOrder>();
-
-            _mySql.Query(Core.Database.Sql.Builder.Append($"SELECT * FROM `orders`"), _mySqlConnection, list =>
-            {
-                if ((list != null) && (list.Count > 0))
-                {
-                    // тут будет происходить отрисовка всех элементов барахолки
-
-                    foreach (var item in list)
-                    {
-                        Puts(item["customer_steam_id"].ToString());
-                        Puts(item["order_id"].ToString());
-
-                        SendReply(player, $"{item["order_id"].ToString()}");
-                    }
-                }
-                else
-                {
-                    PrintWarning("[selectPrice] Error! No element in `items` table founded!");
-                }
-            });
-        }
-
-        private void buyOrder(BasePlayer player, int OrderID, int OrderPrice)
-        {
-            _mySql.Query(Core.Database.Sql.Builder.Append($"SELECT * FROM `customer` WHERE `steamid` = {player.UserIDString}  LIMIT 1"), _mySqlConnection, list =>
-            {
-                if ((list != null) && (list.Count > 0))
-                {
-                    int userMoney = (int)list.FirstOrDefault()["money"];
-
-                   
-                }
-                else
-                {
-                    PrintWarning("[selectPrice] Error! No element in `items` table founded!");
-                }
-            });
-        }
-
         // unusable function
-        private void FinishCreatingOrder (BasePlayer player)
+        private void FinishCreatingOrder(BasePlayer player)
         {
             BOrder playerOrder = FindBOrder(player.UserIDString);
-
-            Puts("test3");
 
             var querry = "INSERT INTO `orders` (`customer_steam_id`, `offered_item_shortname`, " +
                 "`offered_item_blueprint`, `offered_item_condition`, `offered_item_skin_id`, `offered_Item_amount`, " +
@@ -502,28 +266,28 @@ namespace Oxide.Plugins
                 "`order_total_price`, `order_date`, `order_is_active`) VALUES(" +
 
                 $"'{player.UserIDString}', " +
-                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.ShortName                : "NULL")}', " +
-                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.Blueprint.ToString()     : "NULL")}', " +
-                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.Condition.ToString()     : "NULL")}', " +
-                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.SkinID.ToString()        : "NULL")}', " +
-                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.Amount.ToString()        : "NULL")}', " +
+                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.ShortName : "NULL")}', " +
+                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.Blueprint.ToString() : "NULL")}', " +
+                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.Condition.ToString() : "NULL")}', " +
+                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.SkinID.ToString() : "NULL")}', " +
+                $"'{((playerOrder.OfferedItem != null) ? playerOrder.OfferedItem.Amount.ToString() : "NULL")}', " +
                 $"'{((playerOrder.OfferedItem.Content != null) ? converItemContentListFromListToString(playerOrder.OfferedItem.Content) : "NULL")}', " +
-                $"'{((playerOrder.OfferedItem != null) ? playerOrder.ExpectedPrice.ToString()        : "NULL")}', " +
+                $"'{((playerOrder.OfferedItem != null) ? playerOrder.ExpectedPrice.ToString() : "NULL")}', " +
 
-                $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.ShortName              : "NULL")}', " +
-                $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.SkinID.ToString()      : "NULL")}', " +
-                $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.Blueprint.ToString()   : "NULL")}', " +
-                $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.Condition.ToString()   : "NULL")}', " +
-                $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.Amount.ToString()      : "NULL")}', " +
-                $"'{((playerOrder.RequestedItem.Content != null) ? converItemContentListFromListToString(playerOrder.RequestedItem.Content) : "NULL")}', " +
+                $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.ShortName : "NULL")}', " +
+                $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.SkinID.ToString() : "NULL")}', " +
+                $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.Blueprint.ToString() : "NULL")}', " +
+                $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.Condition.ToString() : "NULL")}', " +
+                $"'{((playerOrder.RequestedItem != null) ? playerOrder.RequestedItem.Amount.ToString() : "NULL")}', " +
+                $"'{(((playerOrder.RequestedItem != null) && (playerOrder.RequestedItem.Content != null)) ? converItemContentListFromListToString(playerOrder.RequestedItem.Content) : "NULL")}', " +
 
                 $"'{playerOrder.TotalPrice}', '{playerOrder.Commission}', CURRENT_TIMESTAMP, '0')";
 
             PrintWarning(querry);
 
             _mySql.Insert(Core.Database.Sql.Builder.Append(querry), _mySqlConnection);
-
-            testList();
+/*
+            testList();*/
         }
 
 
@@ -559,7 +323,7 @@ namespace Oxide.Plugins
                     Int64 AmountOfRequestedItem = (playerOrder.AmountOfRequestedItem == 0) ? playerOrder.AmountOfOfferedItem : playerOrder.AmountOfRequestedItem;
 
                     Int64 totalPriceRequestedItems = AmountOfRequestedItem * dbitem_price;
-                    Int64 totalPriceOfferedItems   = playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice;
+                    Int64 totalPriceOfferedItems = playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice;
 
                     playerOrder.Commission = getCommission(totalPriceRequestedItems, totalPriceOfferedItems); // на этом этапе можно отрисовывать игроку окно с вычесленной комиссией
                     playerOrder.TotalPrice = playerOrder.ExpectedPrice - playerOrder.Commission;
@@ -596,13 +360,13 @@ namespace Oxide.Plugins
 
             BItem bItem = new BItem
             {
-                Amount    = item.amount,
-                SkinID    = item.skin,
+                Amount = item.amount,
+                SkinID = item.skin,
                 Blueprint = item.blueprintTarget,
                 ShortName = item.info.shortname,
                 Condition = item.condition,
-                Weapon    = null,
-                Content   = null
+                Weapon = null,
+                Content = null
             };
 
             if (item.info.category == ItemCategory.Weapon)
@@ -621,7 +385,8 @@ namespace Oxide.Plugins
                     else
                         playerOrder.AmountOfRequestedItem = 1;
                 }
-            } else
+            }
+            else
             {
                 // Тут запускается окно, которое показывает игроку окно с выбором кол-ва предметов
                 //playerOrder.AmountOfOfferedItem = 1; // для дебага оставляю тут (должно быть в функции SetAmount(int amountOfOfferedItem);
@@ -638,7 +403,8 @@ namespace Oxide.Plugins
                 bItem.Content = new List<ItemContent>();
                 foreach (var cont in item.contents.itemList)
                 {
-                    bItem.Content.Add(new ItemContent() {
+                    bItem.Content.Add(new ItemContent()
+                    {
                         Amount = cont.amount,
                         Condition = cont.condition,
                         ShortName = cont.info.shortname
@@ -655,7 +421,7 @@ namespace Oxide.Plugins
         }
 
         // нажимает на кнопку "добавить предложиние"
-        private void StartCreatingOrder (BasePlayer player)
+        private void StartCreatingOrder(BasePlayer player)
         {
             Puts("[server]: start creating order");
 
@@ -674,7 +440,7 @@ namespace Oxide.Plugins
         }
 
         // закрытие последнего окна 
-        private void StopCreatingOrder (BasePlayer player)
+        private void StopCreatingOrder(BasePlayer player)
         {
             Puts("[server]: stop creating order");
 
@@ -685,79 +451,16 @@ namespace Oxide.Plugins
 
 
 
-        /// <summary>
-        /// Класс-шаблон предложения на барахолке.
-        /// С началом оформления предложения создается нновый BOrder и помещается в список активных заказов
-        /// На протяжении всего оформления предложения в том или ином случае будет менятся соответствующая переменная объекта класса. 
-        /// После полного заполнения заполнения и нажатия кнопки "создать заказ" вся информация передастся в БД и BOrder удалится из списка активных заказов
-        /// </summary>
-        private class BOrder
-        {
-            public string UserIdString; // User's steam id
 
-            public Int64 ExpectedPrice;   // User select the price
-            public Int64 Commission;      // finding commission by black box
-            public Int64 TotalPrice;      // Expected price * Amount - BlackBox
-
-            public BItem OfferedItem;   // User selected item   
-            public BItem RequestedItem; // User wanted to change for RequestedItem item
-
-            public List<BItem> inventory = new List<BItem>(); // list of all inventory items - needs for selection item while creating order
-
-            public Int64 AmountOfOfferedItem   = 0;
-            public Int64 AmountOfRequestedItem = 0;
-
-            public BOrder(string OUserIdString) { UserIdString = OUserIdString; }
-        }
-
-        private class BItem
-        {
-            public int DB_ID;
-
-            public ulong SkinID;
-            public string ShortName;
-
-            public int Price;
-            public int Blueprint = 0;
-            public float Condition;
-            public int Amount;
-            public int maxOfferedAmount;
-
-            public Weapon Weapon = null;
-            public List<ItemContent> Content = null;
-        }
-
-        private class Weapon
-        {
-            public string ammoType;
-            public int ammoAmount;
-        }
-
-        private class ItemContent
-        {
-            public string ShortName;
-            public float Condition;
-            public int Amount;
-        }
-
-
-        List<ActiveUsers> _activeUsersList = new List<ActiveUsers>();
-        class ActiveUsers
-        {
-            public string User_id;
-            public BItem Item_want_to_buy;
-            public string SpecificItemShortName;
-            public int Money;
-        }
 
 
         #region функции
         private ActiveUsers findUserInActiveUsersList(string userId)
         {
             return _activeUsersList.Find(item => item.User_id == userId);
-        }       
+        }
 
-        private void UpdateUserMoneyInActiveUsersList (string userId)
+        private void UpdateUserMoneyInActiveUsersList(string userId)
         {
             _mySql.Query(Core.Database.Sql.Builder.Append($"SELECT * FROM `customer` WHERE `steamid` = {userId}  LIMIT 1"), _mySqlConnection, list =>
             {
@@ -871,7 +574,7 @@ namespace Oxide.Plugins
         }
 
 
-        private string converWeaponInfoToString (Weapon weapon)
+        private string converWeaponInfoToString(Weapon weapon)
         {
             string resultString = "";
             if (weapon == null)
@@ -882,7 +585,7 @@ namespace Oxide.Plugins
             return resultString;
         }
 
-        private Weapon converWeaponInfoFromListToInfo (string info)
+        private Weapon converWeaponInfoFromListToInfo(string info)
         {
             PrintWarning($"info {info} {info.Length}");
 
@@ -994,7 +697,7 @@ namespace Oxide.Plugins
         {
             BasePlayer player = args.Player();
             if (player == null) return;
-            
+
             StopCreatingOrder(player);
             CuiHelper.DestroyUi(player, Layer);
         }
@@ -1169,15 +872,15 @@ namespace Oxide.Plugins
 
 
         [ConsoleCommand("baraholkaui.buysingleorder")]
-        private void buysingleorder (ConsoleSystem.Arg args)
+        private void buysingleorder(ConsoleSystem.Arg args)
         {
             BasePlayer player = FindBasePlayer(args.GetString(0));
             if (player == null) return;
 
             string shortname = args.GetString(1);
-            int maxAmount    = args.GetInt(2);
-            int pricePerOne  = args.GetInt(3);
-            int order_id     = args.GetInt(4);
+            int maxAmount = args.GetInt(2);
+            int pricePerOne = args.GetInt(3);
+            int order_id = args.GetInt(4);
 
             //CuiHelper.DestroyUi(player, $"{Layer}.BaraholkaUI.rightPanel.tableWithOrders");
             CuiHelper.AddUi(player, new CuiElementContainer {
@@ -1449,7 +1152,7 @@ namespace Oxide.Plugins
         }
 
         [ConsoleCommand("baraholka.modal.setamount")]
-        private void setamounofbuyingorder (ConsoleSystem.Arg args)
+        private void setamounofbuyingorder(ConsoleSystem.Arg args)
         {
 
             CuiElementContainer cont = new CuiElementContainer();
@@ -1458,9 +1161,9 @@ namespace Oxide.Plugins
             if (player == null) return;
 
             int pricePerOne = args.GetInt(1);
-            int maxAmount   = args.GetInt(2);
-            int order_id    = args.GetInt(3);
-            int amount      = args.GetInt(4);
+            int maxAmount = args.GetInt(2);
+            int order_id = args.GetInt(3);
+            int amount = args.GetInt(4);
 
             string message = "";
             string color = HexToCuiColor("#849188");
@@ -1515,7 +1218,7 @@ namespace Oxide.Plugins
                 new CuiElement
                 {
                     Parent = $"modal_window.back_layer",
-                    Name   = $"modal_window.back_layer.btn_buy",
+                    Name = $"modal_window.back_layer.btn_buy",
                     Components = {
                         new CuiImageComponent {
                             Color = color,
@@ -1563,15 +1266,15 @@ namespace Oxide.Plugins
         }
 
         [ConsoleCommand("baraholkaui.check_and_buy_order")]
-        private void check_and_buy_order (ConsoleSystem.Arg args)
+        private void check_and_buy_order(ConsoleSystem.Arg args)
         {
             BasePlayer player = FindBasePlayer(args.GetString(0));
             if (player == null) return;
 
             bool availableToBuy = args.GetBool(1);
-            int order_id        = args.GetInt(2);
-            int amount          = args.GetInt(3);
-            int pricePerOne     = args.GetInt(4);
+            int order_id = args.GetInt(2);
+            int amount = args.GetInt(3);
+            int pricePerOne = args.GetInt(4);
 
             if (!availableToBuy)
             {
@@ -1583,7 +1286,7 @@ namespace Oxide.Plugins
 
             ActiveUsers user = findUserInActiveUsersList(player.UserIDString);
 
-            if (pricePerOne*amount > user.Money)
+            if (pricePerOne * amount > user.Money)
             {
                 SendReply(player, $"У вас нехватает лаве, блять!");
                 return;
@@ -1601,13 +1304,14 @@ namespace Oxide.Plugins
                     {
                         SendReply(player, "Товар уже куплен! Ха, Лох!");
                         SendReply(player, item["MESSAGE"].ToString());
-                    } else
+                    }
+                    else
                     {
-                        int offered_item_blueprint      = (int)item["offered_item_blueprint"];
-                        float offered_item_condition    = (float)item["offered_item_condition"];
-                        int offered_item_skin_id        = (int)item["offered_item_skin_id"];
-                        string offered_item_modules     = item["offered_item_modules"].ToString();
-                        string offered_item_shortname   = item["offered_item_shortname"].ToString();
+                        int offered_item_blueprint = (int)item["offered_item_blueprint"];
+                        float offered_item_condition = (float)item["offered_item_condition"];
+                        int offered_item_skin_id = (int)item["offered_item_skin_id"];
+                        string offered_item_modules = item["offered_item_modules"].ToString();
+                        string offered_item_shortname = item["offered_item_shortname"].ToString();
                         string offered_item_weapon_info = item["offered_item_weapon_info"].ToString();
 
 
@@ -1626,7 +1330,8 @@ namespace Oxide.Plugins
 
                                 SendReply(player, "Получаю калаш");
                             }
-                        } else
+                        }
+                        else
                         {
                             GiveItem(player.inventory,
                                         BuildItem(offered_item_shortname, amount, (ulong)offered_item_skin_id,
@@ -1645,12 +1350,12 @@ namespace Oxide.Plugins
         }
 
         [ConsoleCommand("baraholkaui.draworderss")]
-        private void drawOrders2(ConsoleSystem.Arg args)   
+        private void drawOrders2(ConsoleSystem.Arg args)
         {
-            float fadeIn    = 0.3f;
-            string userId   = args.GetString(0);
-            int startIndex  = args.GetInt(1);
-            int pageIndex   = args.GetInt(2);
+            float fadeIn = 0.3f;
+            string userId = args.GetString(0);
+            int startIndex = args.GetInt(1);
+            int pageIndex = args.GetInt(2);
             string orderByValue = args.GetString(3);
 
             BasePlayer player = FindBasePlayer(userId);
@@ -1694,10 +1399,10 @@ namespace Oxide.Plugins
                     {
                         var item = list[i];
 
-                        string offered_item_shortname       = item["offered_item_shortname"].ToString();
-                        string offered_Item_amount          = item["offered_Item_amount"].ToString();
-                        string offered_Item_price_perone    = item["offered_Item_price_perone"].ToString();
- 
+                        string offered_item_shortname = item["offered_item_shortname"].ToString();
+                        string offered_Item_amount = item["offered_Item_amount"].ToString();
+                        string offered_Item_price_perone = item["offered_Item_price_perone"].ToString();
+
                         int order_id = (int)item["order_id"];
 
                         CuiHelper.AddUi(player, new CuiElementContainer {
@@ -1928,7 +1633,7 @@ namespace Oxide.Plugins
                         });
                     }
 
-                    
+
 
 
                     // "квадратные" кнопки от 1 до N
@@ -2085,7 +1790,7 @@ namespace Oxide.Plugins
                     });
 
                     PrintWarning("[selectPrice] Error! No element in `items` table founded!");
-                } 
+                }
             });
         }
 
@@ -2137,9 +1842,9 @@ namespace Oxide.Plugins
                     int i = 0;
                     foreach (var item in list)
                     {
-                        string offered_item_shortname       = item["offered_item_shortname"].ToString();
-                        string offered_Item_amount          = item["offered_Item_amount"].ToString();
-                        string offered_Item_price_perone    = item["offered_Item_price_perone"].ToString();
+                        string offered_item_shortname = item["offered_item_shortname"].ToString();
+                        string offered_Item_amount = item["offered_Item_amount"].ToString();
+                        string offered_Item_price_perone = item["offered_Item_price_perone"].ToString();
 
                         int order_id = (int)item["order_id"];
 
@@ -2326,7 +2031,7 @@ namespace Oxide.Plugins
                            $"{Layer}.BaraholkaUI.rightPanel.tableWithOrders"
                         },
 
-                        
+
                         {
                             new CuiLabel
                                 {
@@ -2766,7 +2471,7 @@ namespace Oxide.Plugins
                     $"{Layer}.BaraholkaUI.rightPanel.filter.title"
                 },
             });
-                #endregion
+            #endregion
 
 
             player.SendConsoleCommand($"baraholkaui.draworderss {player.UserIDString} {0} {1}");
@@ -2786,7 +2491,7 @@ namespace Oxide.Plugins
             player.SendConsoleCommand($"baraholkaui.draworderss {player.UserIDString} {0} {1}");
         }
 
-        private void drawBalance (string userid, string money)
+        private void drawBalance(string userid, string money)
         {
             BasePlayer player = FindBasePlayer(userid);
 
@@ -2812,9 +2517,10 @@ namespace Oxide.Plugins
             });
         }
 
-        
+
         [ConsoleCommand("baraholkaui.setamount_offereditem")]
-        private void setamount_offereditem(ConsoleSystem.Arg args) {
+        private void setamount_offereditem(ConsoleSystem.Arg args)
+        {
             PrintWarning($"setamount_offereditem: {args.GetInt(1).ToString()}");
 
             BasePlayer player = FindBasePlayer(args.GetString(0));
@@ -2826,16 +2532,28 @@ namespace Oxide.Plugins
 
             if (amount > 0)
             {
-                playerOrder.AmountOfOfferedItem = amount;
+                PrintError($"playerOrder.OfferedItem.maxOfferedAmount {playerOrder.OfferedItem.maxOfferedAmount}");
+                PrintError($"amount {amount}");
+
+                if (playerOrder.OfferedItem.maxOfferedAmount < amount)
+                {
+                    drawMessageCreatingOrder(player, $"Выбрано максимально доступное значение: {playerOrder.OfferedItem.maxOfferedAmount}");
+                    playerOrder.AmountOfOfferedItem = playerOrder.OfferedItem.maxOfferedAmount;
+                } else 
+                    playerOrder.AmountOfOfferedItem = amount;
+
+                calculateCreatingOrder(player.UserIDString);
+            } else
+            {
+                drawMessageCreatingOrder(player, $"Введите правильное кол-во!");
             }
-            
-            calculateCreatingOrder(player.UserIDString);
+
         }
 
         [ConsoleCommand("baraholkaui.set_price_offereditem")]
         private void set_price_offereditem(ConsoleSystem.Arg args)
         {
-            PrintWarning($"set_price_offereditem: {args.GetInt(1).ToString()}");
+            PrintError($"set_price_offereditem: {args.GetInt(1).ToString()}");
 
             BasePlayer player = FindBasePlayer(args.GetString(0));
             if (player == null) return;
@@ -2847,6 +2565,9 @@ namespace Oxide.Plugins
             if (price > 0)
             {
                 playerOrder.ExpectedPrice = price;
+            } else
+            {
+                drawMessageCreatingOrder(player, $"Введите правильную цену!");
             }
 
             calculateCreatingOrder(player.UserIDString);
@@ -2863,13 +2584,13 @@ namespace Oxide.Plugins
             BOrder bOrder = FindBOrder(player.UserIDString);
 
 
-            string selectedItemShortname    = bOrder.inventory[id].ShortName;
-            int selectedItemAmount          = bOrder.inventory[id].Amount;
-            ulong selectedItemSkinId        = bOrder.inventory[id].SkinID;
-            float selectedItemCondition     = bOrder.inventory[id].Condition;
-            int selectedItemBluePrint       = bOrder.inventory[id].Blueprint;
+            string selectedItemShortname = bOrder.inventory[id].ShortName;
+            int selectedItemAmount = bOrder.inventory[id].Amount;
+            ulong selectedItemSkinId = bOrder.inventory[id].SkinID;
+            float selectedItemCondition = bOrder.inventory[id].Condition;
+            int selectedItemBluePrint = bOrder.inventory[id].Blueprint;
 
-            Weapon selectedItemWeapon             = bOrder.inventory[id].Weapon;
+            Weapon selectedItemWeapon = bOrder.inventory[id].Weapon;
             List<ItemContent> selectedItemContent = bOrder.inventory[id].Content;
 
 
@@ -2877,7 +2598,7 @@ namespace Oxide.Plugins
                                                   selectedItemCondition, selectedItemBluePrint,
                                                   selectedItemWeapon, selectedItemContent);
 
-            
+
             int selectedItemAmounTotal = 0;
             int counter = 0;
             foreach (var item in player.inventory.containerMain.itemList)
@@ -2983,13 +2704,13 @@ namespace Oxide.Plugins
             {
                 return false;
             }
-                
+
 
             if (item1.blueprintTarget != item2.blueprintTarget)
             {
                 return false;
             }
-                
+
 
             if ((item1.info.category == ItemCategory.Weapon) && (item2.info.category == ItemCategory.Weapon))
             {
@@ -3056,7 +2777,8 @@ namespace Oxide.Plugins
 
             BOrder playerOrder = FindBOrder(player.UserIDString);
 
-            double offset4 = 0.15;
+            double offset4 = 0.04;
+            double height2 = 0.07;
 
             CuiHelper.AddUi(player, new CuiElementContainer {
                 {
@@ -3194,7 +2916,7 @@ namespace Oxide.Plugins
                                 Material = "assets/content/ui/uibackgroundblur.mat",
                             },
                             new CuiRectTransformComponent {
-                                AnchorMin = "0.55 0.45",       // лево  низ
+                                AnchorMin = "0.55 0.35",       // лево  низ
                                 AnchorMax = "0.9 0.85"       // право верх
                             },
                             new CuiOutlineComponent {
@@ -3235,8 +2957,8 @@ namespace Oxide.Plugins
                             Align = TextAnchor.MiddleLeft,
                         },
                         RectTransform = {
-                            AnchorMin = "0.085 0.65",      // лево  низ
-                            AnchorMax = "0.7 0.8",       // право верх
+                            AnchorMin = $"0.085 {0.77 - height2 - (height2 + offset4) * 0}",      // лево  низ
+                            AnchorMax = $"0.7 {0.77 - (height2 + offset4) * 0}",       // право верх
                             //OffsetMax = "-30 0"
                         }
                     },
@@ -3244,7 +2966,7 @@ namespace Oxide.Plugins
                     $"{LayerModal}.create_order-wrap.main_right.price_per_one"
                 },
 
-                
+
                 {
                     new CuiElement
                     {
@@ -3257,8 +2979,8 @@ namespace Oxide.Plugins
                                 Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
                                 Material = "assets/content/ui/uibackgroundblur.mat", },
                             new CuiRectTransformComponent {
-                                AnchorMin = "0.5 0.68",      // лево  низ
-                                AnchorMax = "0.915 0.77",          // право верх
+                                AnchorMin = $"0.5 {0.77 - height2 - (height2 + offset4) * 0}",      // лево  низ
+                                AnchorMax = $"0.915 {0.77 - (height2 + offset4) * 0}",          // право верх
                             },
                             new CuiOutlineComponent {
                                 Distance = "1 -1",
@@ -3268,7 +2990,7 @@ namespace Oxide.Plugins
                         }
                     }
                 },
-                
+
                 {
                     new CuiElement
                     {
@@ -3276,8 +2998,8 @@ namespace Oxide.Plugins
                         Name   = $"{LayerModal}.create_order-wrap.main_right.price_per_one-block.label",
                         Components =
                         {
-                            new CuiInputFieldComponent { FontSize = 14, Align = TextAnchor.MiddleCenter, 
-                                                         Command = $"baraholkaui.set_price_offereditem {player.UserIDString}", 
+                            new CuiInputFieldComponent { FontSize = 14, Align = TextAnchor.MiddleCenter,
+                                                         Command = $"baraholkaui.set_price_offereditem {player.UserIDString}",
                                                          Text = "12345678"},
                             new CuiRectTransformComponent {
                                 AnchorMin = "0.01 0",
@@ -3298,8 +3020,8 @@ namespace Oxide.Plugins
                             Align = TextAnchor.MiddleLeft,
                         },
                         RectTransform = {
-                            AnchorMin = $"0.085 {0.65 - offset4}",      // лево  низ
-                            AnchorMax = $"0.7 {0.8 - offset4}",       // право верх
+                            AnchorMin = $"0.085 {0.77 - height2 - (height2 + offset4) * 1}",      // лево  низ
+                            AnchorMax = $"0.7 {0.77 - (height2 + offset4) * 1}",       // право верх
                         }
                     },
                     $"{LayerModal}.create_order-wrap.main_right",
@@ -3319,8 +3041,8 @@ namespace Oxide.Plugins
                                 Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
                                 Material = "assets/content/ui/uibackgroundblur.mat", },
                             new CuiRectTransformComponent {
-                                AnchorMin = $"0.5 {0.68 - offset4}",      // лево  низ
-                                AnchorMax = $"0.915 {0.77 - offset4}",          // право верх
+                                AnchorMin = $"0.5 {0.77 - height2 - (height2 + offset4) * 1}",      // лево  низ
+                                AnchorMax = $"0.915 {0.77 - (height2 + offset4) * 1}",          // право верх
                             },
                             new CuiOutlineComponent {
                                 Distance = "1 -1",
@@ -3338,8 +3060,8 @@ namespace Oxide.Plugins
                         Name   = $"{LayerModal}.create_order-wrap.main_right.input",
                         Components =
                         {
-                            new CuiInputFieldComponent { FontSize = 14, Align = TextAnchor.MiddleCenter, 
-                                                         Command = $"baraholkaui.setamount_offereditem {player.UserIDString}", 
+                            new CuiInputFieldComponent { FontSize = 14, Align = TextAnchor.MiddleCenter,
+                                                         Command = $"baraholkaui.setamount_offereditem {player.UserIDString}",
                                                          Text = "12345678"},
                             new CuiRectTransformComponent {
                                 AnchorMin = "0.01 0",
@@ -3362,8 +3084,8 @@ namespace Oxide.Plugins
                             Align = TextAnchor.MiddleLeft,
                         },
                         RectTransform = {
-                            AnchorMin = $"0.085 {0.65 - offset4*2}",      // лево  низ
-                            AnchorMax = $"0.7 {0.8 - offset4*2}",       // право верх
+                            AnchorMin = $"0.085 {0.77 - height2 - (height2 + offset4) * 2}",      // лево  низ
+                            AnchorMax = $"0.7 {0.77 - (height2 + offset4) * 2}",       // право верх
                         }
                     },
                     $"{LayerModal}.create_order-wrap.main_right",
@@ -3383,8 +3105,52 @@ namespace Oxide.Plugins
                                 Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
                                 Material = "assets/content/ui/uibackgroundblur.mat", },
                             new CuiRectTransformComponent {
-                                AnchorMin = $"0.5 {0.68 - offset4*2}",      // лево  низ
-                                AnchorMax = $"0.915 {0.77 - offset4*2}",          // право верх
+                                AnchorMin = $"0.5 {0.77 - height2 - (height2 + offset4) * 2}",      // лево  низ
+                                AnchorMax = $"0.915 {0.77 - (height2 + offset4) * 2}",          // право верх
+                            },
+                            new CuiOutlineComponent {
+                                Distance = "1 -1",
+                                Color = "255 255 255 0.3",
+                                UseGraphicAlpha = false
+                            }
+                        }
+                    }
+                },
+                #endregion
+
+                #region Итоговая стоимость
+                {
+                    new CuiLabel
+                    {
+                        Text = {
+                            Text = $"Итоговая стоимость",
+                            FontSize = 12,
+                            Align = TextAnchor.MiddleLeft,
+                        },
+                        RectTransform = {
+                            AnchorMin = $"0.085 {0.77 - height2 - (height2 + offset4) * 3}",      // лево  низ
+                            AnchorMax = $"0.7 {0.77 - (height2 + offset4) * 3}",       // право верх
+                        }
+                    },
+                    $"{LayerModal}.create_order-wrap.main_right",
+                    $"{LayerModal}.create_order-wrap.main_right.totalprice-label"
+                },
+
+
+                {
+                    new CuiElement
+                    {
+                        Parent = $"{LayerModal}.create_order-wrap.main_right",
+                        Name   = $"{LayerModal}.create_order-wrap.main_right.totalprice-element",
+
+                        Components =
+                        {
+                            new CuiImageComponent { Color = GreenDarkColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat", },
+                            new CuiRectTransformComponent {
+                                AnchorMin = $"0.5 {0.77 - height2 - (height2 + offset4) * 3}",      // лево  низ
+                                AnchorMax = $"0.915 {0.77 - (height2 + offset4) * 3}",          // право верх
                             },
                             new CuiOutlineComponent {
                                 Distance = "1 -1",
@@ -3395,23 +3161,45 @@ namespace Oxide.Plugins
                     }
                 },
 
+                #endregion
+
+
+                {
+                    new CuiElement
+                    {
+                        Parent = $"{LayerModal}.create_order-wrap.main_right",
+                        Name   = $"{LayerModal}.create_order-wrap.main_right.server-log",
+
+                        Components =
+                        {
+                            new CuiImageComponent { Color = GreenDarkColor,
+                                Sprite = "Assets/Content/UI/UI.Background.Tile.psd",
+                                Material = "assets/content/ui/uibackgroundblur.mat", },
+                            new CuiRectTransformComponent {
+                                AnchorMin = $"0.085 {0.74 - height2 - (height2 + offset4) * 4}",      // лево  низ
+                                AnchorMax = $"0.915 {0.74 - (height2 + offset4) * 4}",          // право верх
+                            }
+                        }
+                    }
+                },
+
                 {
                     new CuiLabel
                     {
                         Text = {
-                            Text = $"Выберите предмет...",
+                            Text = $"Выберите предмет для продолжения...",
                             FontSize = 12,
-                            Align = TextAnchor.MiddleCenter,
+                            Align = TextAnchor.MiddleRight,
                         },
                         RectTransform = {
                             AnchorMin = "0.01 0",
-                                AnchorMax = "0.99 1"
+                           AnchorMax = "0.99 1"
                         }
                     },
-                    $"{LayerModal}.create_order-wrap.main_right.commission-element",
-                    $"{LayerModal}.create_order-wrap.main_right.commission-element.input"
+                    $"{LayerModal}.create_order-wrap.main_right.server-log",
+                    $"{LayerModal}.create_order-wrap.main_right.server-log.input"
                 },
-                #endregion
+
 
                 //кнопка подтвердить
                 {
@@ -3425,8 +3213,8 @@ namespace Oxide.Plugins
                             new CuiImageComponent { Color = GreenLightColor,
                             },
                             new CuiRectTransformComponent {
-                                AnchorMin = $"0.085 0.1",      // лево  низ
-                                AnchorMax = $"0.915 0.25",          // право верх
+                                AnchorMin = $"0.085 0.07",      // лево  низ
+                                AnchorMax = $"0.915 0.18",          // право верх
                             },
                             new CuiOutlineComponent {
                                 Distance = "1 -1",
@@ -3445,7 +3233,7 @@ namespace Oxide.Plugins
                             Align = TextAnchor.MiddleCenter
                         },
                         Button = {
-                            Command = $"baraholkaui.close",
+                            Command = $"baraholkaui.finish_creating_order {player.UserIDString}",
                             Color = "0 0 0 0.85"
                         },
                         RectTransform = {
@@ -3615,7 +3403,7 @@ namespace Oxide.Plugins
                     },
 
                 });
-               
+
 
                 if (item.info.category == ItemCategory.Weapon)
                 {
@@ -3697,7 +3485,7 @@ namespace Oxide.Plugins
                                     }
                                 });
                             }
-                            
+
                         }
                     }
                 }
@@ -3739,16 +3527,54 @@ namespace Oxide.Plugins
         }
 
 
-        private void drawCommission (BasePlayer player, string value)
+        //############################################
+        private void setConfirmBtnStatus(BasePlayer player, bool _isAvailable)
         {
+            //нужно дописать вот эти две функции
+            CuiHelper.DestroyUi(player, $"{LayerModal}.create_order-wrap.main_right.btn-wrap.btn");
+            CuiHelper.AddUi(player, new CuiElementContainer {
+                {
+                    new CuiButton
+                    {
+                        Text = {
+                            Text = "Подтвердить",
+                            FontSize = 17,
+                            Align = TextAnchor.MiddleCenter
+                        },
+                        Button = {
+                            Command = $"baraholkaui.finish_creating_order {player.UserIDString}",
+                            Color = "0 0 0 0.85"
+                        },
+                        RectTransform = {
+                            AnchorMin = "0 0 ",
+                            AnchorMax = "1 1"
+                        }
+                    },
+                    $"{LayerModal}.create_order-wrap.main_right.btn-wrap",
+                    $"{LayerModal}.create_order-wrap.main_right.btn-wrap.btn"
+                }
+            });
 
-            Int64 num;
-            bool isNum = Int64.TryParse(value, out num);
-            if (isNum)
-                value = $"{formatNumberToPrice(value)} GT";
+
+            PrintError("Отрисовать");
+        }
 
 
-            CuiHelper.DestroyUi(player, $"{LayerModal}.create_order-wrap.main_right.commission-element.input");
+        [ConsoleCommand("baraholkaui.finish_creating_order")]
+        private void finish_creating_order(ConsoleSystem.Arg args)
+        {
+            PrintError("заканчиваю...");
+
+            BasePlayer player = FindBasePlayer(args.GetString(0));
+            if (player == null) return;
+
+            BOrder playerOrder = FindBOrder(player.UserIDString);
+
+            FinishCreatingOrder(player);
+        }
+        private void drawMessageCreatingOrder(BasePlayer player, string value)
+        {
+            CuiHelper.DestroyUi(player, $"{LayerModal}.create_order-wrap.main_right.server-log.input");
             CuiHelper.AddUi(player, new CuiElementContainer {
                 {
                     new CuiLabel
@@ -3756,20 +3582,75 @@ namespace Oxide.Plugins
                         Text = {
                             Text = value,
                             FontSize = 12,
-                            Align = TextAnchor.MiddleCenter,
+                            Align = TextAnchor.MiddleRight,
                         },
                         RectTransform = {
                             AnchorMin = "0.01 0",
-                                AnchorMax = "0.99 1"
+                            AnchorMax = "0.99 1"
                         }
                     },
-                    $"{LayerModal}.create_order-wrap.main_right.commission-element",
-                    $"{LayerModal}.create_order-wrap.main_right.commission-element.input"
+                    $"{LayerModal}.create_order-wrap.main_right.server-log",
+                    $"{LayerModal}.create_order-wrap.main_right.server-log.input"
                 },
             });
         }
 
-        private void calculateCreatingOrder (string userId)
+        private void drawTotalPrice(BasePlayer player, string value)
+        {
+            CuiHelper.DestroyUi(player, $"{LayerModal}.create_order-wrap.main_right.totalprice-element.label");
+            CuiHelper.AddUi(player, new CuiElementContainer {
+                {
+                    new CuiLabel
+                    {
+                        Text = {
+                            Text = $"{formatNumberToPrice(value)} GT",
+                            FontSize = 12,
+                            Align = TextAnchor.MiddleCenter,
+                        },
+                        RectTransform = {
+                            AnchorMin = "0.01 0",
+                            AnchorMax = "0.99 1"
+                        }
+                    },
+                    $"{LayerModal}.create_order-wrap.main_right.totalprice-element",
+                    $"{LayerModal}.create_order-wrap.main_right.totalprice-element.label"
+                },
+            });
+        }
+
+        private void drawCommission(BasePlayer player, string value)
+        {
+            Int64 num;
+            bool isNum = Int64.TryParse(value, out num);
+            if (isNum)
+            {
+                CuiHelper.DestroyUi(player, $"{LayerModal}.create_order-wrap.main_right.commission-element.message");
+
+                CuiHelper.AddUi(player, new CuiElementContainer {
+                    {
+                        new CuiLabel
+                        {
+                            Text = {
+                                Text = $"{formatNumberToPrice(value)} GT",
+                                FontSize = 12,
+                                Align = TextAnchor.MiddleCenter,
+                            },
+                            RectTransform = {
+                                AnchorMin = "0.01 0",
+                                AnchorMax = "0.99 1"
+                            }
+                        },
+                        $"{LayerModal}.create_order-wrap.main_right.commission-element",
+                        $"{LayerModal}.create_order-wrap.main_right.commission-element.message"
+                    },
+                });
+            }
+
+
+
+        }
+
+        private void calculateCreatingOrder(string userId)
         {
             BasePlayer player = FindBasePlayer(userId);
             BOrder playerOrder = FindBOrder(userId);
@@ -3777,21 +3658,21 @@ namespace Oxide.Plugins
             if (playerOrder.OfferedItem == null)
             {
                 PrintWarning("Выберите предмет...");
-                drawCommission(player, "Выберите предмет...");
+                drawMessageCreatingOrder(player, "Выберите предмет...");
                 return;
             }
 
             if (playerOrder.AmountOfOfferedItem <= 0)
             {
                 PrintWarning("Введите кол-во предметов...");
-                drawCommission(player, "Введите кол-во предметов...");
+                drawMessageCreatingOrder(player, "Введите кол-во предметов...");
                 return;
             }
 
             if (playerOrder.ExpectedPrice <= 0)
             {
                 PrintWarning("Введите стоимость предмета...");
-                drawCommission(player, "Введите стоимость предмета...");
+                drawMessageCreatingOrder(player, "Введите стоимость предмета...");
                 return;
             }
 
@@ -3801,25 +3682,31 @@ namespace Oxide.Plugins
 
             if (basePrice <= 0)
             {
-                drawCommission(player, $"Этот предмет НЕЛЬЗЯ продавать!");
+                drawMessageCreatingOrder(player, $"Этот предмет НЕЛЬЗЯ продавать!");
                 return;
             }
 
 
 
             Int64 totalPriceRequestedItems = playerOrder.AmountOfOfferedItem * basePrice;
-            Int64 totalPriceOfferedItems   = playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice;
+            Int64 totalPriceOfferedItems = playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice;
 
             Puts("");
-            
+
             playerOrder.Commission = getCommission(totalPriceRequestedItems, totalPriceOfferedItems);
             playerOrder.TotalPrice = playerOrder.ExpectedPrice - playerOrder.Commission;
 
             PrintWarning($"totalPriceRequestedItems: {playerOrder.AmountOfOfferedItem} * {basePrice} = {formatNumberToPrice(totalPriceRequestedItems.ToString())}");
             PrintWarning($"totalPriceOfferedItems: {playerOrder.AmountOfOfferedItem} * {playerOrder.ExpectedPrice} = {formatNumberToPrice(totalPriceOfferedItems.ToString())}");
             PrintWarning($"Commission: {playerOrder.Commission}");
-          
-            drawCommission(player, $"{playerOrder.Commission}"); 
+            PrintWarning($"Total price: {playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice}");
+
+            drawCommission(player, $"{playerOrder.Commission}");
+            drawTotalPrice(player, $"{playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice}");
+
+            drawMessageCreatingOrder(player, $"Кол-во: {playerOrder.AmountOfOfferedItem},  Выручка: {playerOrder.AmountOfOfferedItem * playerOrder.ExpectedPrice - playerOrder.Commission} GT");
+            setConfirmBtnStatus(player, true);
+            PrintError("Отладка блять");
         }
 
         #region Интерфейс UI
@@ -4393,7 +4280,7 @@ namespace Oxide.Plugins
                             Text = "Кол-во",
                             FontSize = 12,
                             Align = TextAnchor.MiddleCenter,
-                           
+
                         },
                         Button = {
                             Command  =  $"baraholkaui.draworderss {player.UserIDString} {0} {1} {"`orders`.`offered_Item_amount` ASC"}",
@@ -4463,13 +4350,13 @@ namespace Oxide.Plugins
         #endregion
 
 
-        private int findBasePrice (string shortname)
+        private int findBasePrice(string shortname)
         {
             /*foreach (var filteredItems1 in BaseItemsDictionary)
                 return filteredItems1.Value.Where(item => item.ShortName.Equals(shortname)).FirstOrDefault().BasePrice;
 */
             foreach (var filteredItems in BaseItemsDictionary)
-                foreach(var item in filteredItems.Value)
+                foreach (var item in filteredItems.Value)
                     if (shortname == item.ShortName) return item.BasePrice;
 
             return 0;
@@ -4478,6 +4365,72 @@ namespace Oxide.Plugins
         public static int baseGTCoin = 10;
 
         #region Классы
+
+        /// <summary>
+        /// Класс-шаблон предложения на барахолке.
+        /// С началом оформления предложения создается нновый BOrder и помещается в список активных заказов
+        /// На протяжении всего оформления предложения в том или ином случае будет менятся соответствующая переменная объекта класса. 
+        /// После полного заполнения заполнения и нажатия кнопки "создать заказ" вся информация передастся в БД и BOrder удалится из списка активных заказов
+        /// </summary>
+        private class BOrder
+        {
+            public string UserIdString; // User's steam id
+
+            public Int64 ExpectedPrice;   // User select the price
+            public Int64 Commission;      // finding commission by black box
+            public Int64 TotalPrice;      // Expected price * Amount - BlackBox
+
+            public BItem OfferedItem;   // User selected item   
+            public BItem RequestedItem; // User wanted to change for RequestedItem item
+
+            public List<BItem> inventory = new List<BItem>(); // list of all inventory items - needs for selection item while creating order
+
+            public Int64 AmountOfOfferedItem = 0;
+            public Int64 AmountOfRequestedItem = 0;
+
+            public BOrder(string OUserIdString) { UserIdString = OUserIdString; }
+        }
+
+        private class BItem
+        {
+            public int DB_ID;
+
+            public ulong SkinID;
+            public string ShortName;
+
+            public int Price;
+            public int Blueprint = 0;
+            public float Condition;
+            public int Amount;
+            public int maxOfferedAmount;
+
+            public Weapon Weapon = null;
+            public List<ItemContent> Content = null;
+        }
+
+        private class Weapon
+        {
+            public string ammoType;
+            public int ammoAmount;
+        }
+
+        private class ItemContent
+        {
+            public string ShortName;
+            public float Condition;
+            public int Amount;
+        }
+
+
+        List<ActiveUsers> _activeUsersList = new List<ActiveUsers>();
+        class ActiveUsers
+        {
+            public string User_id;
+            public BItem Item_want_to_buy;
+            public string SpecificItemShortName;
+            public int Money;
+        }
+
         private Dictionary<string, List<BaseItems>> BaseItemsDictionary = new Dictionary<string, List<BaseItems>>
             {
                 { "Weapons",
@@ -5128,13 +5081,13 @@ namespace Oxide.Plugins
                 }
             };
 
-            public class BaseItems
-            {
-                public string ShortName = "";
-                public int BasePrice = 0;
-                public string image = "";
-            }
-            #endregion
+        public class BaseItems
+        {
+            public string ShortName = "";
+            public int BasePrice = 0;
+            public string image = "";
+        }
+        #endregion
 
         #endregion
 
