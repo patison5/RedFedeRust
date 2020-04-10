@@ -54,11 +54,9 @@ namespace Oxide.Plugins
         }
         private void OnPluginLoaded()
         {
-            /*_mySqlConnection = _mySql.OpenDb(Config["host"].ToString(), Convert.ToInt32(Config["port"]), Config["database"].ToString(), Config["username"].ToString(), Config["password"].ToString(), this);
+            _mySqlConnection = _mySql.OpenDb(Config["host"].ToString(), Convert.ToInt32(Config["port"]), Config["database"].ToString(), Config["username"].ToString(), Config["password"].ToString(), this);
             generateItems();
-            generatePrices();
-            createTableWithPrices();*/
-
+            // getPrices();
         }
         protected override void LoadDefaultConfig()
         {
@@ -77,6 +75,12 @@ namespace Oxide.Plugins
         }
         #endregion
 
+        [ConsoleCommand("generateprices")]
+        void NevidimayaRukaRynka(ConsoleSystem.Arg args)
+        {
+            generatePrices();
+            createTableWithPrices();
+        }
 
         private List<ItemDefinitionExtended> Items = new List<ItemDefinitionExtended> { };
 
@@ -92,7 +96,6 @@ namespace Oxide.Plugins
             { "scarecrow.suit", 10 },
             { "partyhat", 10 },
             { "bleach", 10 },
-            { "glue", 10 },
             { "mining.pumpjack", 10 },
             { "mining.quarry", 10 },
             { "apple", 10 },
@@ -145,7 +148,6 @@ namespace Oxide.Plugins
             { "halloween.lootbag.medium", 10 },
             { "halloween.lootbag.small", 10 },
             { "spiderweb", 10 },
-            { "skull.human", 10 },
             { "candycaneclub", 10 },
             { "candycane", 10 },
             { "pookie.bear", 10 },
@@ -167,13 +169,10 @@ namespace Oxide.Plugins
             { "potato", 10 },
             { "clone.potato", 10 },
             { "seed.potato", 10 },
-            { "pumpkin", 10 },
             { "clone.pumpkin", 10 },
             { "seed.pumpkin", 10 },
-            { "fat.animal", 10 },
             { "battery.small", 10 },
             { "blood", 10 },
-            { "bone.fragments", 10 },
             { "diesel_barrel", 10 },
             { "fertilizer", 10 },
             { "horsedung", 10 },
@@ -181,7 +180,6 @@ namespace Oxide.Plugins
             { "researchpaper", 10 },
             { "water.salt", 10 },
             { "water", 10 },
-            { "skull.wolf", 10 },
             { "antiradpills", 10 },
             { "tool.camera", 10 },
             { "fishingrod.handmade", 10 },
@@ -191,20 +189,26 @@ namespace Oxide.Plugins
             { "grenade.smoke", 10 },
             { "supply.signal", 10 },
             { "cakefiveyear", 10 },
-
-            { "sulfur.ore", 190 },
-            { "sulfur", 220 },
-            { "wood", 11 },
-            { "scrap", 1 },
-            { "stones", 55 },
-            { "leather", 10 },
-            { "metal.fragments", 110 },
-            { "charcoal", 10 },
-            { "cloth", 15 },
-            { "crude.oil", 10 },
-            { "hq.metal.ore", 290 },
-            { "metal.refined", 330 },
+            { "sulfur.ore", 23 },
+            { "hq.metal.ore", 10 },
             { "metal.ore", 10 },
+
+            { "cloth", 9 },
+            { "skull.wolf", 10 },
+            { "metal.fragments", 44 },
+            { "metal.refined", 29 },
+            { "wood", 46 },
+            { "stones", 23 },
+            { "bone.fragments", 10 },
+            { "sulfur", 53 },
+            { "leather", 8 },
+            { "glue", 10 },
+            { "scrap", 46 },
+            { "fat.animal", 7 },
+            { "skull.human", 10 },
+            { "crude.oil", 30 },
+            { "charcoal", 14 },
+            { "pumpkin", 10 },
         };
 
         public class ItemDefinitionExtended
@@ -234,6 +238,41 @@ namespace Oxide.Plugins
                 Items.Add(newItem);
             }
 
+        }
+
+        [ConsoleCommand("gtp")]
+        private void getPrice(ConsoleSystem.Arg args)
+        {
+            string arg = args.GetString(0);
+            PrintWarning(arg);
+            var item = Items.Where(o => o.itemDefinition.shortname == arg).FirstOrDefault();
+
+            PrintWarning(item.price.ToString());
+        }
+
+        void getPrices()
+        {
+            int b = 1;
+            for (int i = 0; i < Items.Count; i += 200)
+            { 
+                b += 1;
+                PrintWarning($"Print I {i}");
+                PrintWarning($"Item Count {Items.Count}");
+                var querryString = $"SELECT * FROM `items` LIMIT 200 OFFSET {i}";
+
+                PrintWarning(querryString);
+                //_mySql.Query(Core.Database.Sql.Builder.Append(querryString), _mySqlConnection, list =>
+                //{
+                //    PrintWarning($"{b}");
+                //    for (int j = 0; j < list.Count; j++)
+                //    {
+                //        // PrintWarning($"{(int)list[j]["item_price"]}");
+                //        //var item = Items[i + j];
+                //        //item.price = (ulong)list[j]["price"];
+                //    }
+                //});
+
+            }
         }
 
         void generatePrices()
